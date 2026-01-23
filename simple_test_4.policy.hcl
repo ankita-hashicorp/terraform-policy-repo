@@ -3,12 +3,12 @@ policy {
 
 resource_policy "aws_instance" "monitoring_env_check" {
   enforce {
-    condition     = core::try(attrs.monitoring, false)
-    info_message = "instance monitoring must be enabled"
+    condition     = core::try(attrs.monitoring, false) && !core::try(attrs.tags["Environment"] == "dev", false)
+    info_message = "instance monitoring must be enabled and not in dev environment"
   }
 
   enforce {
-    condition     = core::try(attrs.tags["Environment"] == "production", false)
-    info_message = "tag Environment must be set to production"
+    condition     = core::try(attrs.tags["Environment"] == "dev", false)
+    info_message = "tag Environment must be set to production and not dev"
   }
 }

@@ -8,7 +8,7 @@ resource_policy "aws_instance" "associate_public_ip_address_owner_tag_check" {
   }
 
   enforce {
-    condition     = core::try(attrs.tags["Owner"] != "", false)
-    info_message = "tag Owner must be set for ${attrs.key_name} instance"
+    condition     = core::try(attrs.tags["Name"] != "", false)
+    info_message = "tag Name must be set for ${attrs.key_name} instance"
   }
 }
