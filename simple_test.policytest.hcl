@@ -1,11 +1,19 @@
 policytest {
   targets = ["simple_test.policy.hcl"]
 }
-resource "aws_s3_bucket" "pass_case" {
+
+resource "aws_cloudtrail" "positve_case" {
   attrs = {
-    snapshot_retention_limit = 1
+    enable_log_file_validation = true
+  }
+}
+
+
+resource "aws_cloudtrail" "negative_case" {
+  expect_failure = true
+
+  attrs = {
     enable_log_file_validation = false
-    bucket = "test_bucket_name"
   }
 }
 
