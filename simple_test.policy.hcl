@@ -1,10 +1,9 @@
 policy {
 }
 
-resource_policy "aws_cloudtrail" "enable_log_file_validation" {
+resource_policy "aws_instance" "enable_log_file_validation" {
   enforce {
-    condition     = attrs.enable_log_file_validation == true
-    error_message = "attr value of this resource must be true"
-
+    condition     = core::try(attrs.instance_type == "t3.micro", false)
+    info_message = "instance_type must be t3.micro"
   }
 }
