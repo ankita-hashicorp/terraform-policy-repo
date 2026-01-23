@@ -1,10 +1,10 @@
 policy {
 }
 
-resource_policy "aws_instance" "monitoring_subnet_check" {
+resource_policy "aws_instance" "volume_size_subnet_check" {
   enforce {
-    condition     = core::try(attrs.monitoring, false) && core::try(attrs.tags["Environment"] == "production", false)
-    info_message = "instance monitoring must be enabled and not in non-production environment"
+    condition     = core::try(attrs.root_block_device.volume_size > 0, false)
+    info_message = "root block device volume size must be greater than 0"
   }
 
   enforce {
