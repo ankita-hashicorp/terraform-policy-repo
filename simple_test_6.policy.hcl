@@ -1,10 +1,10 @@
 policy {
 }
 
-resource_policy "aws_instance" "root_encryption_env_check" {
+resource_policy "aws_instance" "source_dest_check_env_check" {
   enforce {
-    condition     = core::try(attrs.root_block_device.encrypted == true, false)
-    info_message = "root block device must be encrypted"
+    condition     = core::try(attrs.source_dest_check != true, false)
+    info_message = "source_dest_check must be enabled"
   }
 
   enforce {

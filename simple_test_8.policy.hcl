@@ -1,10 +1,10 @@
 policy {
 }
 
-resource_policy "aws_instance" "root_encryption_owner_check" {
+resource_policy "aws_instance" "associate_public_ip_address_owner_tag_check" {
   enforce {
-    condition     = core::try(attrs.root_block_device.encrypted == true, false)
-    info_message = "root block device must be encrypted"
+    condition     = core::try(attrs.associate_public_ip_address != true, false)
+    info_message = "associate_public_ip_address must be disabled for ${attr.key_name} instance"
   }
 
   enforce {
