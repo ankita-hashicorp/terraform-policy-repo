@@ -1,9 +1,9 @@
 policy {
 }
 
-resource_policy "aws_instance" "enable_log_file_validation" {
+resource_policy "aws_s3_bucket" "check_bucket_naming" {
   enforce {
-    condition     = core::try(attrs.enable_log_file_validation, false)
+    condition     = core::try(attrs.bucket == "test_bucket_name", false)
     info_message = "attr value of this resource must be true"
   }
 }
