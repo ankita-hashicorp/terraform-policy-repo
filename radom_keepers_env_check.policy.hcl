@@ -3,6 +3,6 @@ policy {
 
 resource_policy "random_id" "keepers_env_check" {
   enforce {
-    condition     = core::try(attrs.byte_length, false)
+    condition     = core::try(attrs.keepers.env, false)
   }
 }
