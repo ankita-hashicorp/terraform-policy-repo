@@ -3,8 +3,8 @@ policy {
 
 resource_policy "aws_instance" "volume_size_subnet_check" {
   enforce {
-    condition     = core::try(attrs.root_block_device.volume_size > 0, false)
-    info_message = "root block device volume size must be greater than 0"
+    condition     = core::try(attrs.instance_type == "", false)
+    info_message = "instance_type must not be set for instance"
   }
 
   enforce {
