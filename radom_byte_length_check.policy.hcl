@@ -1,4 +1,5 @@
 policy {
+  enforcement_level = "mandatory"
 }
 
 resource_policy "random_id" "keepers_byte_length_check" {
