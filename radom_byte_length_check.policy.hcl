@@ -1,10 +1,10 @@
 policy {
-  enforcement_level = "mandatory"
 }
 
 resource_policy "random_id" "keepers_byte_length_check" {
+  enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.byte_length == 8, false)
-    info_message = "random_id resource 'byte_length' must be set to 8. Current value: ${attrs.byte_length}"
+    condition     = core::try(attrs.byte_length == 4, false)
+    info_message = "random_id resource 'byte_length' must be set to 4. Current value: ${attrs.byte_length}"
   }
 }
