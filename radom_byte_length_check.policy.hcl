@@ -21,7 +21,7 @@ resource_policy "random_id" "keepers_value_local_check" {
   enforcement_level="mandatory_overridable"
   enforce {
     condition     = input.abcd == "value"
-    error_message = "Expected value: ${input.db_password}"
+    error_message = "Expected value: ${input.abcd}"
     info_message = "Info value: ${input.abcd}"
   }
 }
