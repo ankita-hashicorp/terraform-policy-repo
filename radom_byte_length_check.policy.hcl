@@ -20,7 +20,7 @@ input "abcd" {
 resource_policy "random_id" "keepers_value_local_check" {
   enforcement_level="mandatory_overridable"
   enforce {
-    condition     = input.abcd == "value"
+    condition     = input.abcd == "vae"
     error_message = "Expected value: ${input.abcd}"
     info_message = "Info value: ${input.abcd}"
   }
