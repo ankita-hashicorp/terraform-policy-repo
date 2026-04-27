@@ -6,7 +6,6 @@ resource_policy "random_id" "keepers_byte_length_check" {
   enforce {
     condition     = core::try(attrs.byte_length == 4, false)
     info_message = "random_id resource 'byte_length' must be set to 4. Current value: ${attrs.byte_length}"
-    error=true
   }
 }
 
@@ -24,6 +23,5 @@ resource_policy "random_id" "keepers_value_local_check" {
     condition     = input.abcd == "value"
     error_message = "Expected value: ${input.abcd}"
     info_message = "Info value: ${input.abcd}"
-    test_attr=input.abcd
   }
 }
