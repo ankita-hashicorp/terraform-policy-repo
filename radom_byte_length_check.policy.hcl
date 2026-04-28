@@ -14,7 +14,7 @@ resource_policy "random_id" "keepers_byte_length_check" {
 input "abcd" {
   type = string
   sensitive = false
-  default = "a"
+  default = "value"
 }
 
 resource_policy "random_id" "keepers_value_local_check" {
