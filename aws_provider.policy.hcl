@@ -19,7 +19,6 @@ policy {
 locals {
   allowed_providers = ["aws", "google"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
-  hello             = plugin::sample::echo("hello world")
 }
 
 
