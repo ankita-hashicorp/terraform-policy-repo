@@ -6,6 +6,7 @@ resource_policy "aws_instance" "instance_type_check" {
   enforce {
     condition     = core::try(attrs.instance_type == "t2.micro", false)
     error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
+    info_message = "Current instance_type value: ${attrs.instance_type}"
   }
  
 }
