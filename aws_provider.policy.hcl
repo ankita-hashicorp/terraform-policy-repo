@@ -30,7 +30,7 @@ locals {
 provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type)
-    info_message = "Provider type '${local.hello}' is allowed and provider version is `${meta.version}`"
+    info_message = "Provider type '${meta.type}' is allowed"
   }
 }
 
