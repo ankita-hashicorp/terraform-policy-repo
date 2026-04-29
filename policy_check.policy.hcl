@@ -25,7 +25,6 @@ resource_policy "aws_instance" "instance_type_check" {
 }
 
 
-
 provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type)
@@ -33,28 +32,23 @@ provider_policy "aws" "provider_type_validation" {
   }
 }
 
-resource_policy "aws_sqs_queue" "encryption_at_rest" {
-  locals {
-    sqs_managed_sse_enabled = core::try(attrs.sqs_managed_sse_enabled, false)
-    kms_key                 = attrs.kms_master_key_id
-  }
-
+resource_policy "aws_instance" "instance_state_check" {
   enforce {
-    condition     = attrs.name_prefix == "test"
+    condition     = attrs.instance_state == "test"
     error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
   }
 }
 
-resource_policy "random_id" "keepers_byte_length_check" {
+resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = core::try(attrs.keepers["instance_type"] == "t3.micro", false)
-    info_message = "Instance_type: ${attrs.keepers["instance_type"]}"
+    condition     = core::try(attrs.monitoring == true, false)
+    info_message = "Monitoring enabled: ${attrs.monitoring}"
   }
 
   enforce {
-    condition     = core::try(attrs.byte_length == 16, false)
-    info_message = "random_id resource 'byte_length' must be 16. Current value: ${attrs.byte_length}"
+    condition     = core::try(attrs.availability_zone == "us-east-1", false)
+    info_message = "Availability zone must be us-east-1. Current value: ${attrs.availability_zone}"
   }
 
 }
