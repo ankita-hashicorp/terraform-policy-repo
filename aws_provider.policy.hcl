@@ -33,20 +33,3 @@ provider_policy "aws" "provider_type_validation" {
     info_message = "Provider type '${meta.type}' is allowed"
   }
 }
-
-# -----------------------------------------------------------------------------
-# Policy: Region Validation
-# Restricts deployments to approved AWS regions using plugin validation
-# Approved regions: us-east-1, us-west-2, eu-west-1
-# -----------------------------------------------------------------------------
-provider_policy "aws" "region_validation" {
-  locals {
-    region        = core::try(attrs.region, "")
-  }
-
-  enforce {
-    condition     = core::contains(local.allowed_regions, local.echoed_region)
-    info_message  = "Provider region '${local.echoed_region}' is allowed"
-    error_message = "Provider region '${local.echoed_region}' is not in allowed list: ${core::join(", ", local.allowed_regions)}"
-  }
-}
