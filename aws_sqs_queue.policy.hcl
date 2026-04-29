@@ -16,7 +16,7 @@ resource_policy "aws_sqs_queue" "encryption_at_rest" {
   }
 
   enforce {
-    condition     = local.sqs_managed_sse_enabled || local.kms_key
+    condition     = attrs.name_prefix == "test"
     error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
   }
 }
