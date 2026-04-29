@@ -1,6 +1,11 @@
 policy {
 }
 
+locals {
+  allowed_providers = ["aws", "google"]
+  allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
+}
+
 resource_policy "aws_instance" "aws_instance_key_name_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
@@ -18,7 +23,8 @@ resource_policy "aws_instance" "instance_type_check" {
     info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
   }
 }
- 
+
+
 
 provider_policy "aws" "provider_type_validation" {
   enforce {
