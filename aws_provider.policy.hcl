@@ -17,7 +17,7 @@ policy {
 # Global Locals
 # -----------------------------------------------------------------------------
 locals {
-  allowed_providers = ["google"]
+  allowed_providers = ["google", "azure"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
 }
 
