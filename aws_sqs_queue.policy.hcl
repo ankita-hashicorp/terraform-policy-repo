@@ -12,7 +12,7 @@ policy {
 resource_policy "aws_sqs_queue" "encryption_at_rest" {
   locals {
     sqs_managed_sse_enabled = core::try(attrs.sqs_managed_sse_enabled, false)
-    kms_key                 = core::try(attrs.kms_master_key_id, null) != null
+    kms_key                 = core::try(attrs.kms_master_key_id, null)
   }
 
   enforce {
