@@ -11,6 +11,5 @@ resource_policy "random_id" "keepers_byte_length_check" {
   enforce {
     condition     = core::try(attrs.keepers["instance_type"] == "t3.micro", false)
     info_message = "Instance_type: ${attrs.keepers["instance_type"]}"
-    error_message = "random_id resource 'keepers' has 'instance_type' that is not set to 't3.micro'"
   }
 }
