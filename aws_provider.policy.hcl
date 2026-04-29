@@ -17,7 +17,7 @@ policy {
 # Global Locals
 # -----------------------------------------------------------------------------
 locals {
-  allowed_providers = ["aws", "google"]
+  allowed_providers = ["google"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
 }
 
@@ -31,5 +31,6 @@ provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type)
     info_message = "Provider type '${meta.type}' is allowed"
+    error_message = "Provider type '${meta.type}' is not allowed. Allowed providers: ${local.allowed_providers}"
   }
 }
