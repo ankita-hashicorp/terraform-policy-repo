@@ -43,7 +43,6 @@ provider_policy "aws" "provider_type_validation" {
 provider_policy "aws" "region_validation" {
   locals {
     region        = core::try(attrs.region, "")
-    echoed_region = plugin::sample::echo(local.region)
   }
 
   enforce {
