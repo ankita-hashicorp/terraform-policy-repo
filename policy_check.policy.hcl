@@ -1,6 +1,11 @@
 policy {
 }
 
+plugin "sample" {
+  source  = "./sample_plugin"
+  version = "0.1.0"
+}
+
 locals {
   allowed_providers = ["aws", "google"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
@@ -29,7 +34,7 @@ resource_policy "aws_instance" "instance_type_check" {
 provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type)
-    info_message = "Provider type '${meta.type}' is allowed"
+    info_message = "Provider type '${local.hello}' is allowed and provider version is `${meta.version}`"
   }
 }
 
