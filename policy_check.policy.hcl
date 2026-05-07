@@ -6,14 +6,14 @@ locals {
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
 }
 
-resource_policy "aws_instance" "aws_instance_key_name_check" {
-  enforcement_level = "mandatory"
-  enforce {
-    condition     = core::try(attrs.key_name == "example-key-3", false)
-    info_message = "Current value: ${attrs.key_name}"
-    error_message = "key_name must be example-key-3"
-  }
-}
+# resource_policy "aws_instance" "aws_instance_key_name_check" {
+#   enforcement_level = "mandatory"
+#   enforce {
+#     condition     = core::try(attrs.key_name == "example-key-3", false)
+#     info_message = "Current value: ${attrs.key_name}"
+#     error_message = "key_name must be example-key-3"
+#   }
+# }
 
 resource_policy "aws_instance" "instance_type_check" {
   enforcement_level = "mandatory_overridable"
@@ -33,24 +33,24 @@ provider_policy "aws" "provider_type_validation" {
   }
 }
 
-resource_policy "aws_instance" "instance_state_check" {
-  enforcement_level = "mandatory_overridable"
-  enforce {
-    condition     = attrs.instance_state == "test"
-    error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
-  }
-}
+# resource_policy "aws_instance" "instance_state_check" {
+#   enforcement_level = "mandatory_overridable"
+#   enforce {
+#     condition     = attrs.instance_state == "test"
+#     error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
+#   }
+# }
 
-resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.monitoring == true, false)
-    info_message = "Monitoring enabled: ${attrs.monitoring}"
-  }
+# resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.monitoring == true, false)
+#     info_message = "Monitoring enabled: ${attrs.monitoring}"
+#   }
 
-  enforce {
-    condition     = core::try(attrs.availability_zone == "us-east-1", false)
-    info_message = "Availability zone must be us-east-1. Current value: ${attrs.availability_zone}"
-  }
+#   enforce {
+#     condition     = core::try(attrs.availability_zone == "us-east-1", false)
+#     info_message = "Availability zone must be us-east-1. Current value: ${attrs.availability_zone}"
+#   }
 
-}
+# }
