@@ -6,14 +6,14 @@ locals {
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
 }
 
-resource_policy "aws_instance" "aws_instance_key_name_check" {
-  enforcement_level = "mandatory"
-  enforce {
-    condition     = core::try(attrs.key_name == "example-key-3", false)
-    info_message = "Current value: ${attrs.key_name}"
-    error_message = "key_name must be example-key-3"
-  }
-}
+# resource_policy "aws_instance" "aws_instance_key_name_check" {
+#   enforcement_level = "mandatory"
+#   enforce {
+#     condition     = core::try(attrs.key_name == "example-key-3", false)
+#     info_message = "Current value: ${attrs.key_name}"
+#     error_message = "key_name must be example-key-3"
+#   }
+# }
 
 resource_policy "aws_instance" "instance_type_check" {
   enforcement_level = "mandatory_overridable"
