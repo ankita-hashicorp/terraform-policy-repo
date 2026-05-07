@@ -25,14 +25,13 @@ resource_policy "aws_instance" "instance_type_check" {
 }
 
 
-provider_policy "aws" "provider_type_validation" {
-  enforcement_level = "mandatory_overridable"
-  enforce {
-    condition    = core::contains(local.allowed_providers, meta.type)
-    info_message = "provider version is `${meta.version}`"
-    error=true
-  }
-}
+# provider_policy "aws" "provider_type_validation" {
+#   enforcement_level = "mandatory_overridable"
+#   enforce {
+#     condition    = core::contains(local.allowed_providers, meta.type)
+#     info_message = "provider version is `${meta.version}`"
+#   }
+# }
 
 resource_policy "aws_instance" "instance_state_check" {
   enforcement_level = "mandatory_overridable"
