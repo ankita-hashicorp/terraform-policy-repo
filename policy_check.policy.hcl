@@ -6,6 +6,12 @@ locals {
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
 }
 
+input "param1" {
+  description = "The type of the instance"
+  type        = string
+  default     = "value1"
+}
+
 resource_policy "aws_instance" "aws_instance_key_name_check" {
   enforcement_level = "mandatory"
   enforce {
@@ -28,7 +34,7 @@ resource_policy "aws_instance" "instance_type_check" {
 provider_policy "aws" "provider_type_validation" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type)
+    condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.value == "value1", false)
     info_message = "provider version is `${meta.version}`"
   }
 }
