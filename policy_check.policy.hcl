@@ -30,7 +30,6 @@ provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type)
     info_message = "provider version is `${meta.version}`"
-    error=true
   }
 }
 //unknown policy
