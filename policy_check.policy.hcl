@@ -13,7 +13,7 @@ input "param1" {
 }
 
 resource_policy "aws_instance" "aws_instance_key_name_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.key_name == "example-key-3", false)
     info_message = "Current value: ${attrs.key_name}"
@@ -34,8 +34,8 @@ resource_policy "aws_instance" "instance_type_check" {
 provider_policy "aws" "provider_type_validation" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "value1", false)
-    info_message = "provider version is `${meta.version}`"
+    condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "val2", false)
+    info_message = "provider version is `${meta.version}` and input param1 value is `${input.param1}`"
   }
 }
 //unknown policy
