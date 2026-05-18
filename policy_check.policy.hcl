@@ -34,7 +34,7 @@ resource_policy "aws_instance" "instance_type_check" {
 provider_policy "aws" "provider_type_validation" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.value == "value1", false)
+    condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "value1", false)
     info_message = "provider version is `${meta.version}`"
   }
 }
