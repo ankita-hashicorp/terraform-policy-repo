@@ -30,14 +30,15 @@ resource_policy "aws_instance" "instance_type_check" {
   }
 }
 
+//provider policy
+# provider_policy "aws" "provider_type_validation" {
+#   enforcement_level = "mandatory_overridable"
+#   enforce {
+#     condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "val2", false)
+#     info_message = "provider version is `${meta.version}` and input param1 value is `${input.param1}`"
+#   }
+# }
 
-provider_policy "aws" "provider_type_validation" {
-  enforcement_level = "mandatory_overridable"
-  enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "val2", false)
-    info_message = "provider version is `${meta.version}` and input param1 value is `${input.param1}`"
-  }
-}
 //unknown policy
 # resource_policy "aws_instance" "instance_state_check" {
 #   enforcement_level = "mandatory_overridable"
