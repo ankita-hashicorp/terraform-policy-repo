@@ -30,6 +30,15 @@ resource_policy "aws_instance" "instance_type_check" {
   }
 }
 
+resource_policy "aws_s3_bucket" "bucket_name_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = core::try(attrs.bucket != "", false)
+    error_message = "bucket must be present. Current value: ${attrs.bucket}"
+    info_message = "Bucket must be present. Current bucket value: ${attrs.bucket}"
+  }
+}
+
 //policy for random resource
 resource_policy "random_id" "byte_length_check" {
   enforcement_level = "mandatory_overridable"
