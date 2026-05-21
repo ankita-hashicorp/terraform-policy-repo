@@ -30,6 +30,15 @@ resource_policy "aws_instance" "instance_type_check" {
   }
 }
 
+//policy for random resource
+resource_policy "random_id" "byte_length_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = attrs.byte_length == 8
+    info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
+  }
+}
+
 //provider policy
 provider_policy "aws" "provider_type_validation" {
   enforcement_level = "mandatory_overridable"
