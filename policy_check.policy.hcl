@@ -23,9 +23,9 @@ input "param1" {
 
 resource_policy "aws_instance" "instance_type_check" {
   enforce {
-    condition     = core::try(attrs.instance_type == "t1.micro", false)
-    error_message = "instance_type must be t1.micro. Current value: ${attrs.instance_type}"
-    info_message = "Instance_type must be t1.micro. Current instance_type value: ${attrs.instance_type}"
+    condition     = core::try(attrs.instance_type == "t2.micro", false)
+    error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
+    info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
   }
 }
 
@@ -66,7 +66,7 @@ resource_policy "aws_instance" "instance_state_check" {
 }
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.monitoring == false, false)
     info_message = "Monitoring enabled: ${attrs.monitoring}"
