@@ -58,7 +58,7 @@ provider_policy "aws" "provider_type_validation" {
 }
 
 //provider policy
-provider_policy "azure" "provider_region_validation" {
+provider_policy "azurerm" "provider_region_validation" {
   enforcement_level = "mandatory_overridable"
   enforce {
     condition    = core::try(core::contains(local.allowed_regions, meta.region), false)
