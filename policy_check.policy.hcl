@@ -22,11 +22,10 @@ input "param1" {
 # }
 
 resource_policy "aws_instance" "instance_type_check" {
-  enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = core::try(attrs.instance_type == "t2.micro", false)
-    error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
-    info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
+    condition     = core::try(attrs.instance_type == "t1.micro", false)
+    error_message = "instance_type must be t1.micro. Current value: ${attrs.instance_type}"
+    info_message = "Instance_type must be t1.micro. Current instance_type value: ${attrs.instance_type}"
   }
 }
 
@@ -67,15 +66,15 @@ provider_policy "aws" "provider_type_validation" {
 # }
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.monitoring == true, false)
+    condition     = core::try(attrs.monitoring == false, false)
     info_message = "Monitoring enabled: ${attrs.monitoring}"
   }
 
   enforce {
-    condition     = core::try(attrs.availability_zone == "us-east-1", false)
-    info_message = "Availability zone must be us-east-1. Current value: ${attrs.availability_zone}"
+    condition     = core::try(attrs.availability_zone == "us-north-1", false)
+    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone}"
   }
 
 }
