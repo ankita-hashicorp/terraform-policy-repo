@@ -57,13 +57,13 @@ provider_policy "aws" "provider_type_validation" {
 }
 
 //unknown policy
-# resource_policy "aws_instance" "instance_state_check" {
-#   enforcement_level = "mandatory_overridable"
-#   enforce {
-#     condition     = attrs.instance_state == "test"
-#     error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
-#   }
-# }
+resource_policy "aws_instance" "instance_state_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = attrs.instance_state == "test"
+    error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
+  }
+}
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
   enforcement_level = "mandatory"
