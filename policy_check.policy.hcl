@@ -62,7 +62,7 @@ provider_policy "azurerm" "provider_region_validation" {
   enforcement_level = "mandatory_overridable"
   enforce {
     condition    = core::try(core::contains(local.allowed_regions, meta.region), false)
-    info_message = "provider region is `${meta.region}` and input param1 value is `${input.param1}`"
+    error_message = "provider region is `${meta.region}` and input param1 value is `${input.param1}`"
   }
 }
 
