@@ -44,8 +44,7 @@ provider_policy "aws" "provider_region_validation" {
   enforcement_level = "mandatory_overridable"
   enforce {
     condition    = core::contains(local.allowed_regions, attrs.region)
-    error_message = "region `${attrs.region}` is not in the list of allowed regions:
-    ${local.allowed_regions}"
+    error_message = "region `${attrs.region}` is not in the list of allowed regions"
     info_message = "region `${attrs.region}` is in the list of allowed regions"
   }
 }
