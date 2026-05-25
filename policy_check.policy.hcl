@@ -12,24 +12,6 @@ input "param1" {
   default     = "value1"
 }
 
-# resource_policy "aws_instance" "aws_instance_key_name_check" {
-#   enforcement_level = "mandatory_overridable"
-#   enforce {
-#     condition     = core::try(attrs.key_name == "example-key-3", false)
-#     info_message = "Current value: ${attrs.key_name}"
-#     error_message = "key_name must be example-key-3"
-#   }
-# }
-
-resource_policy "aws_instance" "instance_type_check" {
-  enforcement_level = "mandatory_overridable"
-  enforce {
-    condition     = core::try(attrs.instance_type == "t1.micro", false)
-    error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
-    info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
-  }
-}
-
 resource_policy "aws_s3_bucket" "bucket_name_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
@@ -39,12 +21,12 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
   }
 }
 
-//policy for random resource
-resource_policy "random_id" "byte_length_check" {
+resource_policy "aws_s3_bucket" "tag_name_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = attrs.byte_length == 8
-    info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
+    condition     = core::try(attrs.tags.Name != "", false)
+    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
+    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name}"
   }
 }
 
@@ -58,24 +40,11 @@ provider_policy "aws" "provider_type_validation" {
 }
 
 //unknown policy
-resource_policy "aws_instance" "instance_state_check" {
+resource_policy "aws_s3_bucket" "instance_state_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = attrs.instance_state == "test"
+    condition     = attrs.bucket_domain_name == "test-bucket-domain-name"
     error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
   }
 }
 
-resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.monitoring == false, false)
-    info_message = "Monitoring enabled: ${attrs.monitoring}"
-  }
-
-  enforce {
-    condition     = core::try(attrs.availability_zone == "us-north-1", false)
-    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone}"
-  }
-
-}
