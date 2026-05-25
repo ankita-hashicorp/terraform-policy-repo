@@ -43,7 +43,7 @@ resource_policy "aws_s3_bucket" "bucket_namespace_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = attrs.bucket_namespace == "global"
-    error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
+    info_message = "Bucket namespace is `${attrs.bucket_namespace}`. expected value is `global`"
   }
 }
 
