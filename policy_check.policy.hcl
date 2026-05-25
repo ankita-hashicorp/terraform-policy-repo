@@ -39,6 +39,17 @@ provider_policy "aws" "provider_type_validation" {
   }
 }
 
+//add another provider policy to check for allowed regions
+provider_policy "aws" "provider_region_validation" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition    = core::contains(local.allowed_regions, attrs.region)
+    error_message = "region `${attrs.region}` is not in the list of allowed regions:
+    ${local.allowed_regions}"
+    info_message = "region `${attrs.region}` is in the list of allowed regions"
+  }
+}
+
 //unknown policy
 resource_policy "aws_s3_bucket" "instance_state_check" {
   enforcement_level = "mandatory_overridable"
