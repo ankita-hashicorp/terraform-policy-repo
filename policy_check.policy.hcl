@@ -35,6 +35,7 @@ provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "value1", false)
     info_message = "provider version is `${meta.version}` and input param1 value is `${input.param1}`"
+    error=true
   }
 }
 
