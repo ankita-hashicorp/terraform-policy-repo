@@ -3,7 +3,7 @@ policy {
 
 locals {
   allowed_providers = ["azure", "aws", "google"]
-  allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1"]
+  allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1", "ap-south-1"]
 }
 
 input "param1" {
@@ -32,28 +32,17 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 
 //provider policy
 provider_policy "aws" "provider_type_validation" {
-  enforcement_level = "mandatory_overridable"
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "value1", false)
     info_message = "provider version is `${meta.version}` and input param1 value is `${input.param1}`"
   }
 }
 
-//add another provider policy to check for allowed regions
-provider_policy "aws" "provider_region_validation" {
-  enforcement_level = "mandatory_overridable"
-  enforce {
-    condition    = core::contains(local.allowed_regions, attrs.region)
-    error_message = "region `${attrs.region}` is not in the list of allowed regions"
-    info_message = "region `${attrs.region}` is in the list of allowed regions"
-  }
-}
-
 //unknown policy
-resource_policy "aws_s3_bucket" "instance_state_check" {
+resource_policy "aws_s3_bucket" "bucket_namespace_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = attrs.bucket_domain_name == "test-bucket-domain-name"
+    condition     = attrs.bucket_namespace == "global"
     error_message = "Amazon SQS queues must be encrypted at rest using AWS KMS keys or SQS managed keys"
   }
 }
