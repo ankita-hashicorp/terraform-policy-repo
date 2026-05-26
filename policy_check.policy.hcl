@@ -13,9 +13,9 @@ input "param1" {
 }
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.bucket != "", false)
+    condition     = core::try(attrs.bucket == "test", false)
     error_message = "bucket must be present. Current value: ${attrs.bucket}"
     info_message = "Bucket must be present. Current bucket value: ${attrs.bucket}"
   }
