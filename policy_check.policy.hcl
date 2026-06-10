@@ -2,7 +2,7 @@ policy {
 }
 
 locals {
-  allowed_providers = ["azure", "google"]
+  allowed_providers = ["azure", "aws", "google"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1", "ap-south-1"]
 }
 
@@ -59,7 +59,6 @@ module_policy "*" "module_source_check" {
     condition     = core::length(local.matches) > 0
     error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
     info_message  = "module source '${local.source}' matches approved prefixes"
-    test=true
   }
 }
 
