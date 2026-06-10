@@ -8,7 +8,7 @@ locals {
 
 input "approved_module_prefixes" {
   type    = list(string)
-  default = ["./modules/", "registry.terraform.io/"]
+  default = ["./modules/"]
 }
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
