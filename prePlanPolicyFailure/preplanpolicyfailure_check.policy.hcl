@@ -6,12 +6,6 @@ locals {
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1", "ap-south-1"]
 }
 
-input "param1" {
-  description = "The type of the instance"
-  type        = string
-  default     = "value1"
-}
-
 input "approved_module_prefixes" {
   type    = list(string)
   default = ["./modules/", "registry.terraform.io/"]
@@ -46,8 +40,9 @@ resource_policy "aws_s3_bucket" "bucket_namespace_check" {
 //provider policy
 provider_policy "aws" "provider_type_validation" {
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "value1", false)
-    info_message = "provider type: ${meta.type} is valid and input param1 is value1"
+    condition    = core::contains(local.allowed_providers, meta.type)
+    info_message = "provider type: ${meta.type} is valid"
+    error_message = "provider type: ${meta.type} is not in the list of allowed providers (${core::join(", ", local.allowed_providers)})"
   }
 }
 
