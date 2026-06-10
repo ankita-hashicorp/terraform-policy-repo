@@ -34,6 +34,15 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
   }
 }
 
+//unknown policy
+resource_policy "aws_s3_bucket" "bucket_namespace_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = attrs.bucket_namespace == "global"
+    info_message = "Bucket namespace is `${attrs.bucket_namespace}`. expected value is `global`"
+  }
+}
+
 //provider policy
 provider_policy "aws" "provider_type_validation" {
   enforce {
@@ -72,3 +81,4 @@ module_policy "*" "module_version_check" {
     error_message = "module version ${local.version} must be >= 1.0.0"
   }
 }
+
