@@ -12,12 +12,16 @@ input "param1" {
   default     = "value1"
 }
 
+input "approved_module_prefixes" {
+  type    = list(string)
+  default = ["./modules/", "registry.terraform.io/"]
+}
+
 resource_policy "aws_s3_bucket" "bucket_name_check" {
   enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.bucket == "test", false)
     error_message = "bucket must be present. Current value: ${attrs.bucket}"
-    info_message = "Bucket must be present. Current bucket value: ${attrs.bucket}"
   }
 }
 
@@ -35,6 +39,22 @@ provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "value1", false)
     info_message = "provider version is `${meta.version}` and input param1 value is `${input.param1}`"
+  }
+}
+
+//module policy
+module_policy "*" "module_source_check" {
+  locals {
+    source = core::try(meta.source, "")
+    matches = [
+      for prefix in input.approved_module_prefixes : prefix
+      if core::length(core::regexall("^${prefix}", local.source)) > 0
+    ]
+  }
+
+  enforce {
+    condition     = core::length(local.matches) > 0
+    error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
   }
 }
 
