@@ -38,7 +38,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 provider_policy "aws" "provider_type_validation" {
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type) && core::try(input.param1 == "value1", false)
-    info_message = "provider version is `${meta.version}` and input param1 value is `${input.param1}`"
+    info_message = "provider type: ${meta.type} is valid and input param1 is value1"
   }
 }
 
@@ -59,12 +59,16 @@ module_policy "*" "module_source_check" {
   }
 }
 
-//unknown policy
-resource_policy "aws_s3_bucket" "bucket_namespace_check" {
-  enforcement_level = "mandatory_overridable"
+//module policy
+module_policy "*" "module_version_check" {
+  filter = core::try(meta.version, "") != ""
+
+  locals {
+    version = core::try(meta.version, "0.0.0")
+  }
+
   enforce {
-    condition     = attrs.bucket_namespace == "global"
-    info_message = "Bucket namespace is `${attrs.bucket_namespace}`. expected value is `global`"
+    condition     = core::semverconstraint(local.version, ">= 1.0.0")
+    error_message = "module version ${local.version} must be >= 1.0.0"
   }
 }
-
