@@ -14,7 +14,7 @@ input "param1" {
 
 input "approved_module_prefixes" {
   type    = list(string)
-  default = ["./modules/"]
+  default = ["./modules/", "registry.terraform.io/"]
 }
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
@@ -77,8 +77,8 @@ module_policy "*" "module_version_check" {
   }
 
   enforce {
-    condition     = core::semverconstraint(local.version, ">= 3.0.0")
-    error_message = "module version ${local.version} must be >= 3.0.0"
+    condition     = core::semverconstraint(local.version, ">= 5.10.0")
+    error_message = "module version ${local.version} must be >= 5.10.0"
   }
 }
 
