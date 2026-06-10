@@ -59,6 +59,7 @@ module_policy "*" "module_source_check" {
     condition     = core::length(local.matches) > 0
     error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
     info_message  = "module source '${local.source}' matches approved prefixes"
+    test=true
   }
 }
 
