@@ -20,6 +20,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_name_check" {
+  operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
     condition     = core::try(attrs.tags.Name == "test", false)
@@ -29,6 +30,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
+  operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false)
