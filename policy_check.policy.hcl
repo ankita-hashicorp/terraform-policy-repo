@@ -94,3 +94,11 @@ module_policy "*" "module_version_check" {
   }
 }
 
+resource_policy "random_id" "byte_length_check" {
+  operations = ["create", "update", "delete"]
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = attrs.byte_length == 8
+    info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
+  }
+}
