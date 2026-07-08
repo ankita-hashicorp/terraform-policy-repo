@@ -2,7 +2,7 @@ policy {
 }
 
 locals {
-  allowed_providers = ["azure", "google"]
+  allowed_providers = ["azure", "aws", "google"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1", "ap-south-1"]
 }
 
@@ -20,7 +20,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_name_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.tags.Name == "test", false)
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
@@ -29,11 +29,37 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false)
     error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner}"
     info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner}"
+  }
+}
+
+resource_policy "aws_s3_bucket" "feature_func_core_getresources" {
+  enforce {
+    condition    = core::length(core::getresources("aws_s3_bucket", { bucket = "lookup-me" })) >= 0
+    info_message = "core::getresources executed"
+  }
+}
+
+resource_policy "aws_instance" "feature_func_core_getdatasource_by_ami" {
+  # Resolve the aws_ami data source backing this instance by filtering on the
+  # instance's own `ami` attribute, then enforce a property on the resolved
+  # AMI. The positive path is pinned by a matching data block in the
+  # policytest fixture.
+  locals {
+      ami_data = core::getdatasource("aws_ami", {
+      filter = [{
+        name   = "image-id"
+        values = [attrs.ami]
+      }]
+    })
+  }
+  enforce {
+    condition    = local.ami_data.architecture == "x86_64"
+    info_message = "core::getdatasource resolved ami ${local.ami_data.id} (architecture = ${local.ami_data.architecture})"
   }
 }
 
