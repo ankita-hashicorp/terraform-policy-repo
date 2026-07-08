@@ -23,9 +23,9 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
   operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.tags.Name == "test", false)
-    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
-    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name}"
+    condition     = core::try(prior_attrs.tags.Name == "test", false)
+    error_message = "bucket must have a name tag. Current value: ${prior_attrs.tags.Name}"
+    info_message = "Bucket must have a name tag. Current name value: ${prior_attrs.tags.Name}"
   }
 }
 
@@ -33,9 +33,9 @@ resource_policy "aws_s3_bucket" "tag_owner_check" {
   operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.tags.Owner == "test", false)
-    error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner}"
-    info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner}"
+    condition     = core::try(prior_attrs.tags.Owner == "test", false)
+    error_message = "bucket must have an owner tag. Current value: ${prior_attrs.tags.Owner}"
+    info_message = "Bucket must have an owner tag. Current owner value: ${prior_attrs.tags.Owner}"
   }
 }
 
