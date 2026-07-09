@@ -20,7 +20,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_name_check" {
-  operations = ["replace"]
+  operations = ["create"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.tags.Name == "test", false)
@@ -30,6 +30,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
+   operations = ["update"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false)
@@ -94,6 +95,7 @@ module_policy "*" "module_version_check" {
 }
 
 resource_policy "random_id" "byte_length_check" {
+  operations = ["create"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = attrs.byte_length == 8
