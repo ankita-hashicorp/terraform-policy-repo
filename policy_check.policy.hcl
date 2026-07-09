@@ -30,11 +30,11 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
   enforcement_level = "mandatory"
-  message="Bucket must have an owner tag. Current owner value: ${prior_attrs.tags.Owner}"
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false)
     error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner}"
     info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner}"
+    message="Bucket must have an owner tag. Current owner value: ${prior_attrs.tags.Owner}"
   }
 }
 
