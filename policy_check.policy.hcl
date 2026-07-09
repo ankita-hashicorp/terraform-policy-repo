@@ -20,22 +20,21 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_name_check" {
-  operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(prior_attrs.tags.Name == "test", false)
-    error_message = "bucket must have a name tag. Current value: ${prior_attrs.tags.Name}"
-    info_message = "Bucket must have a name tag. Current name value: ${prior_attrs.tags.Name}"
+    condition     = core::try(attrs.tags.Name == "test", false)
+    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
+    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name}"
   }
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
-  operations = ["delete"]
   enforcement_level = "mandatory"
+  message="Bucket must have an owner tag. Current owner value: ${prior_attrs.tags.Owner}"
   enforce {
-    condition     = core::try(prior_attrs.tags.Owner == "test", false)
-    error_message = "bucket must have an owner tag. Current value: ${prior_attrs.tags.Owner}"
-    info_message = "Bucket must have an owner tag. Current owner value: ${prior_attrs.tags.Owner}"
+    condition     = core::try(attrs.tags.Owner == "test", false)
+    error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner}"
+    info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner}"
   }
 }
 
@@ -43,6 +42,7 @@ resource_policy "aws_s3_bucket" "feature_func_core_getresources" {
   enforce {
     condition    = core::length(core::getresources("aws_s3_bucket", { bucket = "lookup-me" })) >= 0
     info_message = "core::getresources executed"
+    error=true
   }
 }
 
