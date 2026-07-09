@@ -20,7 +20,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_name_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.tags.Name == "test", false)
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
@@ -29,7 +29,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false)
     error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner}"
