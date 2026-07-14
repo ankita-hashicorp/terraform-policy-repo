@@ -93,8 +93,8 @@ module_policy "*" "module_version_check" {
   }
 
   enforce {
-    condition     = core::semverconstraint(local.version, ">= 6.0.0")
-    error_message = "module version ${local.version} must be >= 6.0.0"
+    condition     = core::semverconstraint(local.version, ">= 1.0.0")
+    error_message = "module version ${local.version} must be >= 1.0.0"
   }
 }
 
@@ -105,4 +105,27 @@ resource_policy "random_id" "byte_length_check" {
     condition     = attrs.byte_length == 8
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
   }
+}
+
+//cross reference policy
+resource_policy "aws_instance" "cross_resource_reference_check" {
+    locals {
+        vpc_security_group_ids = core::try(attrs.vpc_security_group_ids, [])
+        has_security_groups = core::length(local.vpc_security_group_ids) > 0
+        security_groups = local.has_security_groups ? core::getresources("aws_security_group", {
+            vpc_id = local.vpc_security_group_ids[0]
+        }) : []
+        first_sg = core::try(local.security_groups[0], {})
+        first_sg_ingress = core::try(local.first_sg.ingress, [])
+        has_ingress_rules = core::length(local.first_sg_ingress) > 0
+    }
+
+    enforce {
+        condition = local.has_security_groups
+        error_message = "EC2 instance must have at least one security group attached"
+    }
+
+    enforce {
+        condition = local.has_ingress_rules
+    }
 }
