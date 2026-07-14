@@ -93,8 +93,8 @@ module_policy "*" "module_version_check" {
   }
 
   enforce {
-    condition     = core::semverconstraint(local.version, ">= 1.0.0")
-    error_message = "module version ${local.version} must be >= 1.0.0"
+    condition     = core::semverconstraint(local.version, ">= 6.0.0")
+    error_message = "module version ${local.version} must be >= 6.0.0"
   }
 }
 
