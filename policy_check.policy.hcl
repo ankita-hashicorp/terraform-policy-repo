@@ -37,9 +37,9 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 resource_policy "aws_s3_bucket" "tag_owner_check" {
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.tags.Owner != "", false)
-    error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner}"
-    info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner}"
+    condition     = core::try(attrs.tags.Owner != "", false) && core::try(meta.tfe_workspace.tags.test_tag == "test_value", false)
+    error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner} && workspace tag value is ${meta.tfe_workspace.tags.test_tag}"
+    info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner} && workspace tag value is ${meta.tfe_workspace.tags.test_tag}"
   }
 }
 
