@@ -106,30 +106,3 @@ resource_policy "random_id" "byte_length_check" {
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
   }
 }
-
-//cloudtrail bucket logging cross reference policy
-resource_policy "aws_cloudtrail" "cloudtrail_bucket_logging_check" {
-    enforcement_level = "mandatory_overridable"
-    locals {
-        s3_bucket_name = core::try(attrs.s3_bucket_name, "")
-        logging_configs = local.s3_bucket_name != "" ? core::getresources("aws_s3_bucket_logging", {
-            bucket = local.s3_bucket_name
-        }) : []
-        has_logging_config = core::length(local.logging_configs) > 0
-        first_logging = core::try(local.logging_configs[0], {})
-        target_bucket = core::try(first_logging.target_bucket, "")
-        has_target_bucket = local.target_bucket != ""
-    }
-
-    enforce {
-        condition     = local.has_logging_config
-        error_message = "CloudTrail bucket '${local.s3_bucket_name}' must have an aws_s3_bucket_logging configuration"
-        info_message  = "Found ${core::length(local.logging_configs)} logging config(s) for CloudTrail bucket '${local.s3_bucket_name}'"
-    }
-
-    enforce {
-        condition     = local.has_target_bucket
-        error_message = "CloudTrail bucket logging must specify a target_bucket. Current value: '${local.target_bucket}'"
-        info_message  = "CloudTrail bucket logging target_bucket is '${local.target_bucket}'"
-    }
-}
