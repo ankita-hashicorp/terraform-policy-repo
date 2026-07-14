@@ -11,6 +11,11 @@ input "approved_module_prefixes" {
   default = ["./modules/", "registry.terraform.io/"]
 }
 
+input "param1" {
+  type    = string
+  default = "value1"
+}
+
 resource_policy "aws_s3_bucket" "bucket_name_check" {
   enforcement_level = "advisory"
   enforce {
@@ -23,7 +28,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
   operations = ["create"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.tags.Name == "test", false)
+    condition     = core::try(attrs.tags.Name == "test", false) && core::try(input.param1 == "value1", false)
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name}"
   }
