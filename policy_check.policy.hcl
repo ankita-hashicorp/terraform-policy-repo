@@ -20,9 +20,9 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
   operations = ["delete"]
   enforcement_level = "advisory"
   enforce {
-    condition     = core::try(attrs.bucket != "test", false)
-    error_message = "Bucket must be present. Current value: ${attrs.bucket} with operation delete"
-    info_message = "Bucket must be present. Current bucket value: ${attrs.bucket} with operation delete"
+    condition     = core::try(prior_attrs.bucket != "test", false)
+    error_message = "Bucket must be present. Current value: ${prior_attrs.bucket} with operation delete"
+    info_message = "Bucket must be present. Current bucket value: ${prior_attrs.bucket} with operation delete"
   }
 }
 
@@ -114,7 +114,7 @@ resource_policy "random_id" "byte_length_check_delete" {
   operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = attrs.byte_length == 16
-    info_message = "byte_length must be 16. Current value: ${attrs.byte_length} with operation delete"
+    condition     = prior_attrs.byte_length == 16
+    info_message = "byte_length must be 16. Current value: ${prior_attrs.byte_length} with operation delete"
   }
 }
