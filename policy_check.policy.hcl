@@ -110,7 +110,7 @@ resource_policy "random_id" "byte_length_check" {
   }
 }
 
-resource_policy "random_id" "byte_length_check" {
+resource_policy "random_id" "byte_length_check_delete" {
   operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
