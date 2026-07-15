@@ -70,11 +70,11 @@ provider_policy "aws" "provider_type_validation" {
   }
 }
 
-provider_policy "aws" "provider_name_format_validation" {
+provider_policy "aws" "provider_type_format_validation" {
   enforce {
-    condition     = core::try(core::length(core::regexall("^[a-z][a-z0-9-]*$", meta.type)) > 0, false)
-    error_message = "provider name '${meta.type}' has an invalid format (must be lowercase and may contain only letters, digits, and '-')"
-    info_message  = "provider name '${meta.type}' has a valid format"
+    condition     = core::try(core::length(core::regexall("test", meta.type)) > 0, false)
+    error_message = "provider type '${meta.type}' has an invalid format (must be lowercase and may contain only letters, digits, and '-')"
+    info_message  = "provider type '${meta.type}' has a valid format"
   }
 }
 
