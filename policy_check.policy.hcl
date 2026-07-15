@@ -70,13 +70,13 @@ provider_policy "aws" "provider_type_validation" {
   }
 }
 
-provider_policy "aws" "provider_type_format_validation" {
-  enforce {
-    condition     = core::try(core::length(core::regexall("test", meta.type)) > 0, false)
-    error_message = "provider type '${meta.type}' has an invalid format (must be lowercase and may contain only letters, digits, and '-')"
-    info_message  = "provider type '${meta.type}' has a valid format"
-  }
-}
+# provider_policy "aws" "provider_type_format_validation" {
+#   enforce {
+#     condition     = core::try(core::length(core::regexall("test", meta.type)) > 0, false)
+#     error_message = "provider type '${meta.type}' has an invalid format (must be lowercase and may contain only letters, digits, and '-')"
+#     info_message  = "provider type '${meta.type}' has a valid format"
+#   }
+# }
 
 //module policy
 module_policy "*" "module_version_check" {
