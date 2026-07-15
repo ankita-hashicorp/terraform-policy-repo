@@ -16,7 +16,7 @@ input "param1" {
   default = "value1"
 }
 
-resource_policy "aws_s3_bucket" "bucket_name_check" {
+resource_policy "aws_s3_bucket" "bucket_name_check_delete_policy" {
   operations = ["delete"]
   enforcement_level = "advisory"
   enforce {
@@ -26,7 +26,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
   }
 }
 
-resource_policy "aws_s3_bucket" "tag_name_check" {
+resource_policy "aws_s3_bucket" "tag_name_check_create_policy" {
   operations = ["create"]
   enforcement_level = "mandatory"
   enforce {
@@ -36,7 +36,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
   }
 }
 
-resource_policy "aws_s3_bucket" "tag_owner_check" {
+resource_policy "aws_s3_bucket" "tag_owner_check_create_policy" {
   enforcement_level = "mandatory"
   operations = ["create"]
   enforce {
@@ -92,7 +92,7 @@ module_policy "*" "module_version_check" {
   }
 }
 
-resource_policy "random_id" "byte_length_check" {
+resource_policy "random_id" "byte_length_check_create_policy" {
   operations = ["create"]
   enforcement_level = "mandatory"
   enforce {
@@ -101,7 +101,7 @@ resource_policy "random_id" "byte_length_check" {
   }
 }
 
-resource_policy "random_id" "byte_length_check_delete" {
+resource_policy "random_id" "byte_length_check_delete_policy" {
   operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
