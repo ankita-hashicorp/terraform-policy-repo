@@ -20,9 +20,9 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
   operations = ["delete"]
   enforcement_level = "advisory"
   enforce {
-    condition     = core::try(prior_attrs.bucket != "test", false)
-    error_message = "Bucket must be present. Current value: ${prior_attrs.bucket} with operation delete"
-    info_message = "Bucket must be present. Current bucket value: ${prior_attrs.bucket} with operation delete"
+    condition     = core::try(core::length(core::regexall("test", prior_attrs.bucket)) > 0, false)
+    error_message = "Bucket name must contain 'test'. Current value: ${prior_attrs.bucket} with operation delete"
+    info_message = "Bucket name must contain 'test'. Current bucket value: ${prior_attrs.bucket} with operation delete"
   }
 }
 
