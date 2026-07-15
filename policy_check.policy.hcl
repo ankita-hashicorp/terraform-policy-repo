@@ -17,10 +17,12 @@ input "param1" {
 }
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
+  operations = ["delete"]
   enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.bucket != "test", false)
-    error_message = "bucket must be present. Current value: ${attrs.bucket}"
+    error_message = "Bucket must be present. Current value: ${attrs.bucket} with operation delete"
+    info_message = "Bucket must be present. Current bucket value: ${attrs.bucket} with operation delete"
   }
 }
 
@@ -28,9 +30,9 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
   operations = ["create"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.tags.Name == "test", false) && core::try(input.param1 == "value1", false)
-    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and param1 value is ${input.param1}"
-    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and param1 value is ${input.param1}"
+    condition     = core::try(attrs.tags.Name == "test", false)
+    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} with operation create"
+    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} with operation create"
   }
 }
 
@@ -38,9 +40,9 @@ resource_policy "aws_s3_bucket" "tag_owner_check" {
   enforcement_level = "mandatory"
   operations = ["create"]
   enforce {
-    condition     = core::try(attrs.tags.Owner == "test", false) && core::try(meta.tfe_workspace.tags.test_tag == "test_value", false)
-    error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner} && workspace tag value is ${meta.tfe_workspace.tags.test_tag}"
-    info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner} && workspace tag value is ${meta.tfe_workspace.tags.test_tag}"
+    condition     = core::try(attrs.tags.Owner == "test", false)
+    error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner} with operation create"
+    info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner} with operation create"
   }
 }
 
@@ -53,7 +55,7 @@ resource_policy "aws_s3_bucket" "feature_func_core_getresources" {
 
 //unknown policy
 resource_policy "aws_s3_bucket" "bucket_namespace_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.bucket_namespace == "global"
     info_message = "Bucket namespace is `${attrs.bucket_namespace}`. expected value is `global`"
@@ -104,6 +106,15 @@ resource_policy "random_id" "byte_length_check" {
   enforcement_level = "mandatory"
   enforce {
     condition     = attrs.byte_length == 8
-    info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
+    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} with operation create"
+  }
+}
+
+resource_policy "random_id" "byte_length_check" {
+  operations = ["delete"]
+  enforcement_level = "mandatory"
+  enforce {
+    condition     = attrs.byte_length == 16
+    info_message = "byte_length must be 16. Current value: ${attrs.byte_length} with operation delete"
   }
 }
