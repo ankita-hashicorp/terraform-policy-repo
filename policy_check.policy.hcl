@@ -19,14 +19,14 @@ input "param1" {
 resource_policy "aws_s3_bucket" "bucket_name_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = core::try(attrs.bucket == "test", false)
+    condition     = core::try(attrs.bucket != "test", false)
     error_message = "bucket must be present. Current value: ${attrs.bucket}"
   }
 }
 
 resource_policy "aws_s3_bucket" "tag_name_check" {
   operations = ["create"]
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   enforce {
     condition     = core::try(attrs.tags.Name == "test", false) && core::try(input.param1 == "value1", false)
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and param1 value is ${input.param1}"
@@ -35,7 +35,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   operations = ["create"]
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false) && core::try(meta.tfe_workspace.tags.test_tag == "test_value", false)
@@ -101,7 +101,7 @@ module_policy "*" "module_version_check" {
 
 resource_policy "random_id" "byte_length_check" {
   operations = ["create"]
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.byte_length == 8
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
