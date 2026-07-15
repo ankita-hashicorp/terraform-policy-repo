@@ -35,7 +35,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   operations = ["create"]
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false) && core::try(meta.tfe_workspace.tags.test_tag == "test_value", false)
