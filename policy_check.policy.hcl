@@ -68,6 +68,12 @@ provider_policy "aws" "provider_type_validation" {
     condition    = core::contains(local.allowed_providers, meta.type)
     info_message = "provider type: ${meta.type} is valid"
   }
+
+  enforce {
+    condition     = core::try(core::length(core::regexall("^[a-z][a-z0-9-]*$", meta.type)) > 0, false)
+    error_message = "provider name '${meta.type}' has an invalid format (must be lowercase and may contain only letters, digits, and '-')"
+    info_message  = "provider name '${meta.type}' has a valid format"
+  }
 }
 
 //module policy
@@ -84,6 +90,12 @@ module_policy "*" "module_source_check" {
     condition     = core::length(local.matches) > 0
     error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
     info_message  = "module source '${local.source}' matches approved prefixes"
+  }
+
+  enforce {
+    condition     = core::try(local.valid_source_format, false)
+    error_message = "module source '${local.source}' has an invalid format (only alphanumerics, '.', '_', '/', and '-' are allowed)"
+    info_message  = "module source '${local.source}' has a valid format"
   }
 }
 
