@@ -40,7 +40,7 @@ resource_policy "aws_s3_bucket" "tag_owner_check" {
   enforcement_level = "mandatory"
   operations = ["create"]
   enforce {
-    condition     = core::try(attrs.tags.Owner == "test", false) && core::try(input.param1 == "value1", false)
+    condition     = core::try(attrs.tags.Owner != "test", false) && core::try(input.param1 == "value1", false)
     error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner} with operation create and input param1 value: ${input.param1}"
     info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner} with operation create and input param1 value: ${input.param1}"
   }
