@@ -2,7 +2,7 @@ policy {
 }
 
 locals {
-  allowed_providers = ["azure", "aws", "google"]
+  allowed_providers = ["azure", "google"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1", "ap-south-1"]
 }
 
@@ -38,9 +38,9 @@ resource_policy "aws_s3_bucket" "tag_name_check_create_policy" {
 
 resource_policy "aws_s3_bucket" "tag_owner_check_create_policy" {
   enforcement_level = "mandatory"
-  operations = ["create"]
+  operations = ["create", "update"]
   enforce {
-    condition     = core::try(attrs.tags.Owner == "test", false)
+    condition     = core::try(attrs.tags.Owner == "test", false) && core::try(prior_attrs.tags.Owner == "team-a", false)
     error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner} with operation ${meta.operation}"
     info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner} with operation ${meta.operation}"
   }
