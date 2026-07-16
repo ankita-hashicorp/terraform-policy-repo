@@ -64,6 +64,7 @@ resource_policy "aws_s3_bucket" "bucket_namespace_check" {
 
 //provider policy
 provider_policy "aws" "provider_type_validation" {
+  operations = ["create", "update"]
   enforce {
     condition    = core::contains(local.allowed_providers, meta.type)
     info_message = "provider type: ${meta.type} is valid"
