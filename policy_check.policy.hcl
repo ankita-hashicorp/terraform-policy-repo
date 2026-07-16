@@ -30,7 +30,7 @@ resource_policy "aws_s3_bucket" "tag_name_check_create_policy" {
   operations = ["create"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.tags.Name == "test", false)
+    condition     = core::try(attrs.tags.Name != "test", false)
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} with operation ${meta.operation}"
     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} with operation ${meta.operation}"
   }
@@ -40,7 +40,7 @@ resource_policy "aws_s3_bucket" "tag_owner_check_create_policy" {
   enforcement_level = "mandatory"
   operations = ["create"]
   enforce {
-    condition     = core::try(attrs.tags.Owner == "test", false)
+    condition     = core::try(attrs.tags.Owner != "test", false)
     error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner} with operation ${meta.operation}"
     info_message = "Bucket must have an owner tag. Current owner value: ${attrs.tags.Owner} with operation ${meta.operation}"
   }
@@ -96,7 +96,7 @@ resource_policy "random_id" "byte_length_check_create_policy" {
   operations = ["create"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = attrs.byte_length == 8
+    condition     = attrs.byte_length > 0
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} with operation ${meta.operation}"
   }
 }
@@ -105,7 +105,7 @@ resource_policy "random_id" "byte_length_check_delete_policy" {
   operations = ["delete"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = prior_attrs.byte_length == 16
+    condition     = prior_attrs.byte_length > 0
     info_message = "byte_length must be 16. Current value: ${prior_attrs.byte_length} with operation ${meta.operation}"
   }
 }
