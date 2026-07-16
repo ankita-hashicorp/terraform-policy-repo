@@ -37,7 +37,7 @@ resource_policy "aws_s3_bucket" "tag_name_check_create_policy" {
 }
 
 resource_policy "aws_s3_bucket" "tag_owner_check_create_policy" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   operations = ["create"]
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false)
