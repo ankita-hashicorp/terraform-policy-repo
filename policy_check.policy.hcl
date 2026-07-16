@@ -38,7 +38,7 @@ resource_policy "aws_s3_bucket" "tag_name_check_create_policy" {
 
 resource_policy "aws_s3_bucket" "tag_owner_check_create_policy" {
   enforcement_level = "mandatory"
-  operations = ["create", "update"]
+  operations = ["update"]
   enforce {
     condition     = core::try(attrs.tags.Owner == "test", false) && core::try(prior_attrs.tags.Owner == "team-a", false)
     error_message = "bucket must have an owner tag. Current value: ${attrs.tags.Owner} with operation ${meta.operation}"
