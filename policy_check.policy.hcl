@@ -28,7 +28,7 @@ resource_policy "random_password" "length_special_check" {
 resource_policy "random_shuffle" "result_count_check" {
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.result_count == 1, false) && core::try(attrs.input == ["us-east-1a", "us-east-1b", "us-east-1c"], false)
+    condition     = core::try(attrs.result_count == 1, false) && core::try(core::length(attrs.input) != 0, false)
     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
     error_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
   }
