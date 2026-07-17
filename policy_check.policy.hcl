@@ -24,3 +24,12 @@ resource_policy "random_password" "length_special_check" {
     error_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
   }
 }
+
+resource_policy "random_shuffle" "result_count_check" {
+  enforcement_level = "mandatory"
+  enforce {
+    condition     = core::try(attrs.result_count == 1, false) && core::try(attrs.input == ["us-east-1a", "us-east-1b", "us-east-1c"], false)
+    info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
+    error_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
+  }
+}
