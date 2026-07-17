@@ -93,7 +93,6 @@ module_policy "*" "module_version_check" {
 }
 
 resource_policy "random_id" "byte_length_check_create_policy" {
-  operations = ["create"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = attrs.byte_length == 8
@@ -102,7 +101,6 @@ resource_policy "random_id" "byte_length_check_create_policy" {
 }
 
 resource_policy "random_id" "byte_length_check_delete_policy" {
-  operations = ["delete"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = prior_attrs.byte_length == 16
