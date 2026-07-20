@@ -9,7 +9,7 @@ resource_policy "random_id" "byte_length_check" {
   operations = ["delete"]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.byte_length > 2 && input.param1 == "val1"
+    condition     = prior_attrs.byte_length > 2 && input.param1 == "val1"
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
   }
 }
@@ -49,7 +49,7 @@ resource_policy "random_password" "length_special_check" {
   operations=["delete"]
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = attrs.length != 10 && attrs.special == true
+    condition     = prior_attrs.length != 10 && prior_attrs.special == true
     info_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
     error_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
   }
