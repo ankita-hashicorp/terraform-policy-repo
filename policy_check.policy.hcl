@@ -6,7 +6,7 @@ input "param1" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  operations = ["delete"]
+  operations = ["update","delete"]
   enforcement_level = "advisory"
   enforce {
     condition     = prior_attrs.byte_length > 2 && input.param1 == "val1"
@@ -15,7 +15,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "length_prefix_check" {
-  operations = ["create"]
+  operations = ["create", "update"]
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.length == 3 && attrs.prefix == "dev"
