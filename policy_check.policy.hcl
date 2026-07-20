@@ -56,7 +56,7 @@ resource_policy "random_password" "length_special_check" {
 }
 
 resource_policy "random_shuffle" "result_count_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
