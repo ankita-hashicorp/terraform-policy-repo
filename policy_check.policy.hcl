@@ -7,15 +7,8 @@ input "param1" {
 
 resource_policy "random_id" "byte_length_check" {
   enforce {
-    condition     = attrs.byte_length > 2 && input.param1 === "val1"
+    condition     = attrs.byte_length > 2 && input.param1 == "val1"
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
-  }
-}
-
-resource_policy "random_id" "input_param_check" {
-  enforce {
-    condition     = input.param1 === "val1"
-    info_message = "input param1 should be ${input.param1}"
   }
 }
 
