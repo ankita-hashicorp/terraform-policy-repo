@@ -20,7 +20,7 @@ resource_policy "random_pet" "length_prefix_check" {
 resource_policy "random_id" "random_dec_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.dec === "test"
+    condition     = core::try(attrs.dec === "test", false)
     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
   }
