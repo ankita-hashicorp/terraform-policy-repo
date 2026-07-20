@@ -1,5 +1,10 @@
 policy {}
 
+input "param1" {
+  type = string;
+  default_value = "val1"
+}
+
 resource_policy "random_id" "byte_length_check" {
   enforce {
     condition     = attrs.byte_length > 2
@@ -10,21 +15,32 @@ resource_policy "random_id" "byte_length_check" {
 resource_policy "random_pet" "length_prefix_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.length == 3 && attrs.prefix == "dev"
+    condition     = attrs.length == 3 && attrs.prefix == "dev" && core::try(input.param1 === "val1", false)
     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
   }
 }
 
 //unknown policy
-resource_policy "random_id" "random_dec_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.dec === "test", false)
-    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
-    error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
-  }
-}
+# resource_policy "random_id" "random_dec_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.dec === "test", false)
+#     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
+#     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
+#   }
+# }
+
+//errored policy
+# resource_policy "random_id" "random_dec_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.dec === "test", false)
+#     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
+#     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
+#     test_message = "aaa"
+#   }
+# }
 
 resource_policy "random_password" "length_special_check" {
   enforcement_level = "mandatory_overridable"
