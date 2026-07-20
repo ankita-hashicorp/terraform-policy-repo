@@ -1,8 +1,8 @@
 policy {}
 
 input "param1" {
-  type = string;
-  default_value = "val1"
+  type = string
+  default = "val1"
 }
 
 resource_policy "random_id" "byte_length_check" {
@@ -15,7 +15,7 @@ resource_policy "random_id" "byte_length_check" {
 resource_policy "random_pet" "length_prefix_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.length == 3 && attrs.prefix == "dev" && core::try(input.param1 === "val1", false)
+    condition     = attrs.length == 3 && attrs.prefix == "dev" && core::try(input.param1 === "val1")
     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
   }
