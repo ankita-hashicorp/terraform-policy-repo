@@ -12,6 +12,13 @@ resource_policy "random_id" "byte_length_check" {
   }
 }
 
+resource_policy "random_id" "input_param_check" {
+  enforce {
+    condition     = input.param1 === "val1"
+    info_message = "input param1 should be ${input.param1}"
+  }
+}
+
 resource_policy "random_pet" "length_prefix_check" {
   enforcement_level = "advisory"
   enforce {
@@ -21,7 +28,7 @@ resource_policy "random_pet" "length_prefix_check" {
   }
 }
 
-//unknown policy
+# //unknown policy
 # resource_policy "random_id" "random_dec_check" {
 #   enforcement_level = "advisory"
 #   enforce {
@@ -31,7 +38,7 @@ resource_policy "random_pet" "length_prefix_check" {
 #   }
 # }
 
-//errored policy
+# //errored policy
 # resource_policy "random_id" "random_dec_check" {
 #   enforcement_level = "advisory"
 #   enforce {
