@@ -10,7 +10,7 @@ resource_policy "random_id" "byte_length_check" {
 resource_policy "random_pet" "length_prefix_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.length == 3 && attrs.prefix != "dev"
+    condition     = attrs.length == 3 && attrs.prefix == "dev"
     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
   }
@@ -28,7 +28,7 @@ resource_policy "random_password" "length_special_check" {
 resource_policy "random_shuffle" "result_count_check" {
   enforcement_level = "mandatory"
   enforce {
-    condition     = core::try(attrs.result_count == 1, false) && core::try(core::length(attrs.input) != 0, false)
+    condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
     error_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
   }
