@@ -44,7 +44,6 @@ resource_policy "random_pet" "length_prefix_check" {
 # }
 
 resource_policy "random_password" "length_special_check" {
-  operations=["delete"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = prior_attrs.length != 10 && prior_attrs.special == true
