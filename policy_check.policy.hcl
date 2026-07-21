@@ -8,8 +8,8 @@ input "param1" {
 resource_policy "random_id" "byte_length_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = prior_attrs.byte_length > 2 && input.param1 == "val1"
-    info_message = "byte_length must be 8. Current value: ${prior_attrs.byte_length} and input ${input.param1}"
+    condition     = attrs.byte_length > 2 && input.param1 == "val1"
+    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
   }
 }
 
@@ -46,9 +46,9 @@ resource_policy "random_pet" "length_prefix_check" {
 resource_policy "random_password" "length_special_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = prior_attrs.length != 10 && prior_attrs.special == true
-    info_message = "length must be 10 and special must be true. Current values: length=${prior_attrs.length}, special=${prior_attrs.special}"
-    error_message = "length must be 10 and special must be true. Current values: length=${prior_attrs.length}, special=${prior_attrs.special}"
+    condition     = attrs.length != 10 && attrs.special == true
+    info_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
+    error_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
   }
 }
 
