@@ -6,7 +6,7 @@ input "param1" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = attrs.byte_length > 2 && input.param1 == "val1"
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
@@ -53,7 +53,7 @@ resource_policy "random_password" "length_special_check" {
 }
 
 resource_policy "random_shuffle" "result_count_check" {
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
