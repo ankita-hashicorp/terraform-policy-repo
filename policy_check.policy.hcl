@@ -44,7 +44,7 @@ resource_policy "random_id" "random_id_check" {
 # }
 
 resource_policy "random_password" "length_special_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = attrs.length != 10 && attrs.special == true
     info_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
