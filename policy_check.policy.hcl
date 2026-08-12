@@ -17,7 +17,7 @@ resource_policy "random_pet" "length_prefix_check" {
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.length == 3 && attrs.prefix == "dev"
-    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
+    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}. stack deployment name is ${meta.tfe_stack.deployment_name}"
     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
   }
 }
@@ -27,8 +27,8 @@ resource_policy "random_id" "random_id_check" {
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.id != ""
-    info_message = "id must be present. stack deployment name is ${meta.tfe_stack.stack_name}"
-    error_message = "id must be present. stack deployment name is ${meta.tfe_stack.stack_name}"
+    info_message = "id must be present. stack deployment name is ${meta.stack_name}"
+    error_message = "id must be present"
   }
 }
 
