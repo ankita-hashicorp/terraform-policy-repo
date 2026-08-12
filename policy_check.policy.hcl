@@ -27,8 +27,8 @@ resource_policy "random_id" "random_id_check" {
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.id != ""
-    info_message = "id must be present"
-    error_message = "id must be present"
+    info_message = "id must be present. stack deployment name is ${tfe_stack.stack_name}"
+    error_message = "id must be present. stack deployment name is ${tfe_stack.stack_name}"
   }
 }
 
