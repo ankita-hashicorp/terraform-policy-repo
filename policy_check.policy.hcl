@@ -15,10 +15,9 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  operations = [ "delete" ]
   enforcement_level = "advisory"
   enforce {
-    condition     = prior_attrs.length == 3
+    condition     = attrs.length == 3
     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
   }
