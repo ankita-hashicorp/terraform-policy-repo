@@ -9,7 +9,7 @@ resource_policy "random_id" "byte_length_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = attrs.byte_length > 2 && input.param1 == "val1"
-    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
+    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}. stack name ${tfe_stack.stack_name}"
   }
 }
 
