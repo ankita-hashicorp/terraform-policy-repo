@@ -35,15 +35,15 @@ resource_policy "random_pet" "pet_prefix_check" {
 }
 
 //unknown policy
-resource_policy "random_id" "random_id_check" {
-  operations = [ "delete" ]
-  enforcement_level = "advisory"
-  enforce {
-    condition     = prior_attrs != ""
-    info_message = "id must be present"
-    error_message = "id must be present"
-  }
-}
+# resource_policy "random_id" "random_id_check" {
+#   operations = [ "delete" ]
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = prior_attrs != ""
+#     info_message = "id must be present"
+#     error_message = "id must be present"
+#   }
+# }
 
 # //errored policy
 # resource_policy "random_id" "random_dec_check" {
