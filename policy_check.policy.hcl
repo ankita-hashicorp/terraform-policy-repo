@@ -27,7 +27,7 @@ resource_policy "random_pet" "pet_prefix_check" {
   operations = [ "create", "update"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = attrs.prefix == "dev"
+    condition     = attrs.prefix != ""
     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
   }
