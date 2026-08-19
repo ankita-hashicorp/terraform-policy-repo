@@ -43,17 +43,6 @@ resource_policy "random_id" "random_id_check" {
   }
 }
 
-# //errored policy
-# resource_policy "random_id" "random_dec_check" {
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition     = core::try(attrs.dec === "test", false)
-#     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
-#     error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
-#     test_message = "aaa"
-#   }
-# }
-
 resource_policy "random_password" "length_special_check" {
   enforcement_level = "advisory"
   enforce {
@@ -69,5 +58,47 @@ resource_policy "random_shuffle" "result_count_check" {
     condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
     error_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
+  }
+}
+
+//errored policy
+resource_policy "random_id" "random_dec_check" {
+  enforcement_level = "advisory"
+  enforce {
+    condition     = core::try(attrs.dec == "test", false)
+    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
+    error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}"
+  }
+}
+
+resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
+  enforcement_level = "advisory"
+  enforce {
+    condition     = core::try(attrs.monitoring == false, false)
+    info_message = "Monitoring enabled: ${attrs.monitoring}"
+  }
+
+  enforce {
+    condition     = core::try(attrs.availability_zone == "us-north-1", false)
+    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone}"
+  }
+
+}
+
+resource_policy "aws_instance" "aws_instance_key_name_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = core::try(attrs.key_name == "example-key-3", false)
+    info_message = "Current value: ${attrs.key_name}"
+    error_message = "key_name must be example-key-3"
+  }
+}
+
+resource_policy "aws_instance" "instance_type_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = core::try(attrs.instance_type == "t1.micro", false)
+    error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
+    info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
   }
 }
