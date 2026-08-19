@@ -18,8 +18,8 @@ resource_policy "random_pet" "pet_length_check" {
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.length == 3
-    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
-    error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
+    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}."
+    error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}."
   }
 }
 
@@ -28,8 +28,8 @@ resource_policy "random_pet" "pet_prefix_check" {
   enforcement_level = "mandatory"
   enforce {
     condition     = attrs.prefix == "dev"
-    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
-    error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}, prefix=${attrs.prefix}."
+    info_message = "current prefix=${attrs.prefix}."
+    error_message = "current prefix=${attrs.prefix}."
   }
 }
 
