@@ -102,3 +102,29 @@ resource_policy "aws_instance" "instance_type_check" {
     info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
   }
 }
+
+resource_policy "aws_s3_bucket" "bucket_name_check" {
+  enforcement_level = "advisory"
+  enforce {
+    condition     = core::try(attrs.bucket == "test", false)
+    error_message = "bucket must be present. Current value: ${attrs.bucket}"
+  }
+}
+
+resource_policy "aws_s3_bucket" "tag_name_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = core::try(attrs.tags.Name != "", false)
+    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
+    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name}"
+  }
+}
+
+//unknown policy
+resource_policy "aws_s3_bucket" "bucket_namespace_check" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = attrs.bucket_namespace == "global"
+    info_message = "Bucket namespace is `${attrs.bucket_namespace}`. expected value is `global`"
+  }
+}
