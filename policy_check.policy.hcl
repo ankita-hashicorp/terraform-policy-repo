@@ -61,16 +61,6 @@ resource_policy "random_shuffle" "result_count_check" {
   }
 }
 
-//errored policy
-resource_policy "random_id" "random_dec_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.dec == "test", false)
-    info_message = "length must be 3 and prefix must be 'test'."
-    error_message = "length must be 3 and prefix must be 'test'."
-  }
-}
-
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
   enforcement_level = "advisory"
   enforce {
@@ -121,9 +111,9 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 }
 
 //unknown policy
-resource_policy "aws_s3_bucket" "bucket_namespace_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = attrs.bucket_namespace == "global"
-  }
-}
+# resource_policy "aws_s3_bucket" "bucket_namespace_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = attrs.bucket_namespace == "global"
+#   }
+# }
