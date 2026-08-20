@@ -125,6 +125,5 @@ resource_policy "aws_s3_bucket" "bucket_namespace_check" {
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.bucket_namespace == "global"
-    info_message = "Bucket namespace is `${attrs.bucket_namespace}`. expected value is `global`"
   }
 }
