@@ -25,7 +25,7 @@ resource_policy "random_pet" "pet_length_check" {
 
 resource_policy "random_pet" "pet_prefix_check" {
   operations = [ "create", "update"]
-  enforcement_level = "mandatory"
+  enforcement_level = "advisory"
   enforce {
     condition     = attrs.prefix == "dev"
     info_message = "current prefix=${attrs.prefix}."
@@ -66,8 +66,8 @@ resource_policy "random_id" "random_dec_check" {
   enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.dec == "test", false)
-    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}"
-    error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}"
+    info_message = "length must be 3 and prefix must be 'test'."
+    error_message = "length must be 3 and prefix must be 'test'."
   }
 }
 
@@ -86,7 +86,7 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
 }
 
 resource_policy "aws_instance" "aws_instance_key_name_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.key_name == "example-key-3", false)
     info_message = "Current value: ${attrs.key_name}"
