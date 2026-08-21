@@ -5,6 +5,16 @@ input "param1" {
   default = "val1"
 }
 
+locals {
+  allowed_providers = ["azure", "google"]
+  allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1", "ap-south-1"]
+}
+
+input "approved_module_prefixes" {
+  type    = list(string)
+  default = ["./modules/", "registry.terraform.io/"]
+}
+
 resource_policy "random_id" "byte_length_check" {
   operations = [ "create" ]
   enforcement_level = "advisory"
