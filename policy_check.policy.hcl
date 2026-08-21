@@ -117,3 +117,43 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 #     condition     = attrs.bucket_namespace == "global"
 #   }
 # }
+
+//provider policy
+provider_policy "aws" "provider_type_validation" {
+  enforce {
+    condition    = core::contains(local.allowed_providers, meta.type)
+    info_message = "provider type: ${meta.type} is valid"
+    error_message = "provider type: ${meta.type} is not in the list of allowed providers (${core::join(", ", local.allowed_providers)})"
+  }
+}
+
+//module policy
+module_policy "*" "module_source_check" {
+  locals {
+    source = core::try(meta.source, "")
+    matches = [
+      for prefix in input.approved_module_prefixes : prefix
+      if core::length(core::regexall("^${prefix}", local.source)) > 0
+    ]
+  }
+
+  enforce {
+    condition     = core::length(local.matches) > 0
+    error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
+    info_message  = "module source '${local.source}' matches approved prefixes"
+  }
+}
+
+//module policy
+module_policy "*" "module_version_check" {
+  filter = core::try(meta.version, "") != ""
+
+  locals {
+    version = core::try(meta.version, "0.0.0")
+  }
+
+  enforce {
+    condition     = core::semverconstraint(local.version, ">= 5.10.0")
+    error_message = "module version ${local.version} must be >= 5.10.0"
+  }
+}
