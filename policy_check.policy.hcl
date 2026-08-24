@@ -27,9 +27,9 @@ resource_policy "random_id" "byte_length_check" {
 resource_policy "random_pet" "pet_length_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = attrs.length == 3
-    info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not d dm cnkknvnknfnvkfkv"
-    error_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
+    condition     = attrs.length == 6
+    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not d dm cnkknvnknfnvkfkv"
+    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
   }
 }
 
