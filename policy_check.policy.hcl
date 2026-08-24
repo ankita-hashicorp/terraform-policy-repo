@@ -17,15 +17,15 @@ input "approved_module_prefixes" {
 
 resource_policy "random_id" "byte_length_check" {
   operations = [ "create" ]
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
-    condition     = attrs.byte_length > 2 && input.param1 == "val1"
+    condition     = attrs.byte_length > 12 && input.param1 == "val1"
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
   }
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = attrs.length == 3
     info_message = "length must be 3 and prefix must be 'dev'. Current values: length=${attrs.length}."
