@@ -6,7 +6,7 @@ input "param1" {
 }
 
 locals {
-  allowed_providers = ["azure", "google"]
+  allowed_providers = ["azure", "aws", "google"]
   allowed_regions   = ["us-east-1", "us-west-2", "eu-west-1", "ap-south-1"]
 }
 
