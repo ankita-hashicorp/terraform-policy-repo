@@ -12,7 +12,7 @@ locals {
 
 input "approved_module_prefixes" {
   type    = list(string)
-  default = ["./modules/", "registry.terraform.io/"]
+  default = []
 }
 
 resource_policy "random_id" "byte_length_check" {
