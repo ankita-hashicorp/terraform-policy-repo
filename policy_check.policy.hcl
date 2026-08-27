@@ -176,3 +176,19 @@ module_policy "*" "module_version_check" {
     error_message = "module version ${local.version} must be >= 5.10.0"
   }
 }
+
+
+//cross refernce getResources policy
+resource_policy "aws_instance" "feature_getresources_fetch_specific" {
+  # From the instance policy, fetch the sibling S3 buckets and prove we can
+  # both retrieve them and read a concrete attribute (their tags) back.
+  locals {
+    buckets      = core::getresources("aws_s3_bucket", {})
+    owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") != ""]
+  }
+  enforce {
+    condition     = core::length(local.owned_buckets) >= 1
+    error_message = "core::getresources must return at least one aws_s3_bucket carrying an owner tag"
+    info_message  = "core::getresources fetched ${core::length(local.buckets)} bucket(s), ${core::length(local.owned_buckets)} with an owner tag"
+  }
+}
