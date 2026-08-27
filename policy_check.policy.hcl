@@ -27,10 +27,19 @@ resource_policy "random_id" "byte_length_check" {
 resource_policy "random_pet" "pet_length_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = attrs.length == 6 && core::try(meta.tfe_stack.stack_name, "") == "dev"
-    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. stack name ${meta.tfe_stack.stack_name}"
+    condition     = attrs.length == 6
+    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
     error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
   }
+}
+
+resource_policy "aws_instance" "meta_stack_name_check" {
+  enforce {
+    condition = core::try(meta.tfe_stack.stack_name, "") == "aws" 
+    info_message = "meta stack name: ${meta.tfe_stack.stack_name}"
+    error_message = "meta stack name: ${meta.tfe_stack.stack_name}"
+  }
+  
 }
 
 resource_policy "random_pet" "pet_prefix_check" {
