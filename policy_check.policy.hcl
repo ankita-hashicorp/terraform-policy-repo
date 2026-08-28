@@ -177,7 +177,7 @@ module_policy "*" "module_source_check" {
   }
 
   enforce {
-    condition     = core::length(local.matches) > 0
+    condition     = core::length(local.matches) > 0 && meta.tfe_stack.deployment_name == "dev"
     error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
     info_message  = "module source '${local.source}' matches approved prefixes"
   }
