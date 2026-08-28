@@ -12,7 +12,7 @@ locals {
 
 input "approved_module_prefixes" {
   type    = list(string)
-  default = []
+  default = ["./modules/", "registry.terraform.io/"]
 }
 
 resource_policy "random_id" "byte_length_check" {
@@ -33,11 +33,12 @@ resource_policy "random_pet" "pet_length_check" {
   }
 }
 
-resource_policy "aws_instance" "meta_stack_name_check" {
+resource_policy "aws_instance" "meta_stack_name_subnet_id_checkdoormat aws tf-push variable-set --account aws_ankita.doshi_test --hostname app.staging.terraform.io --id varset-GfXCxoZaukWgTNi4" {
+  filter = meta.tfe_stack.stack_name == "terraform-stacks-repo-ankita"
   enforce {
-    condition = core::try(meta.tfe_stack.stack_name, "") == "aws" 
-    info_message = "meta stack name: ${meta.tfe_stack.stack_name}"
-    error_message = "meta stack name: ${meta.tfe_stack.stack_name}"
+    condition = core::try(attrs.subnet_id, "") != "aws" 
+    info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
+    error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
   }
   
 }
