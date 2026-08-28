@@ -160,9 +160,9 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 //provider policy
 provider_policy "aws" "provider_type_validation" {
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type)
+    condition    = core::contains(local.allowed_providers, meta.type) && meta.tfe_stack.deployment_group == "dev_default"
     info_message = "provider type: ${meta.type} is valid"
-    error_message = "provider type: ${meta.type} is not in the list of allowed providers (${core::join(", ", local.allowed_providers)})"
+    error_message = "provider type: ${meta.type} is not allowed. stack deployment group ${meta.tfe_stack.deployment_group}"
   }
 }
 
