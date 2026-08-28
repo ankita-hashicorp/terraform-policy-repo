@@ -33,12 +33,32 @@ resource_policy "random_pet" "pet_length_check" {
   }
 }
 
-resource_policy "aws_instance" "meta_stack_group_subnet_id_check" {
-  filter = meta.tfe_stack.deployment_group == "terraform-stacks-repo-ankita1"
+resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
+  filter = meta.tfe_stack.deployment_group == "dev_default"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
-    info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.deployment_group}"
-    error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.deployment_group}"
+    info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
+    error_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
+  }
+  
+}
+
+resource_policy "aws_instance" "meta_stack_name_subnet_id_check" {
+  filter = meta.tfe_stack.stack_name == "terraform-stacks-repo-ankita"
+  enforce {
+    condition = core::try(attrs.subnet_id, "") != "aws" 
+    info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
+    error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
+  }
+  
+}
+
+resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
+  filter = meta.tfe_stack.deployment_name == "test"
+  enforce {
+    condition = core::try(attrs.subnet_id, "") != "aws" 
+    info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
+    error_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
   }
   
 }
