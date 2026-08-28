@@ -140,7 +140,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 //provider policy
 provider_policy "aws" "provider_type_validation" {
   enforce {
-    condition    = core::indexof(local.allowed_providers, meta.type) > 0
+    condition    = core::contains(local.allowed_providers, meta.type)
     info_message = "provider type: ${meta.type} is valid"
     error_message = "provider type: ${meta.type} is not in the list of allowed providers (${core::join(", ", local.allowed_providers)})"
   }
