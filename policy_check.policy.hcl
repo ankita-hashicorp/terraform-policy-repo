@@ -43,10 +43,9 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
   
 }
 
-resource_policy "aws_instance" "meta_stack_name_subnet_id_check" {
-  filter = meta.tfe_stack.stack_name == "terraform-stacks-repo-ankita"
+resource_policy "aws_instance" "meta_stack_name_check" {
   enforce {
-    condition = core::try(attrs.subnet_id, "") != "aws" 
+    condition = meta.tfe_stack.stack_name == "aws" && attrs.subnet_id == ""
     info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
     error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
   }
