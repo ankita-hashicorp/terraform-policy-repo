@@ -33,12 +33,12 @@ resource_policy "random_pet" "pet_length_check" {
   }
 }
 
-resource_policy "aws_instance" "meta_stack_name_subnet_id_check" {
-  filter = meta.tfe_stack.stack_name == "terraform-stacks-repo-ankita1"
+resource_policy "aws_instance" "meta_stack_group_subnet_id_check" {
+  filter = meta.tfe_stack.deployment_group == "terraform-stacks-repo-ankita1"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
-    info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
-    error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
+    info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.deployment_group}"
+    error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.deployment_group}"
   }
   
 }
