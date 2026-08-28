@@ -33,7 +33,7 @@ resource_policy "random_pet" "pet_length_check" {
   }
 }
 
-resource_policy "aws_instance" "meta_stack_name_subnet_id_checkdoormat aws tf-push variable-set --account aws_ankita.doshi_test --hostname app.staging.terraform.io --id varset-GfXCxoZaukWgTNi4" {
+resource_policy "aws_instance" "meta_stack_name_subnet_id_check" {
   filter = meta.tfe_stack.stack_name == "terraform-stacks-repo-ankita"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
