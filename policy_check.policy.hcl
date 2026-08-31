@@ -19,7 +19,7 @@ resource_policy "random_id" "byte_length_check" {
   operations = [ "create" ]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.byte_length > 12 && var.param1 == "val3"
+    condition     = attrs.byte_length > 12
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1} and var ${var.param1}"
   }
 }
