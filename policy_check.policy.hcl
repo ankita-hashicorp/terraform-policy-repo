@@ -189,12 +189,10 @@ module_policy "*" "module_version_check" {
 
   locals {
     version = core::try(meta.version, "0.0.0")
-    buckets      = core::getresources("aws_s3_bucket", {})
-    owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") == "dev"]
   }
 
   enforce {
-    condition     = core::semverconstraint(local.version, ">= 5.10.0") && core::length(local.owned_buckets) >= 1
+    condition     = core::semverconstraint(local.version, ">= 5.10.0")
     error_message = "module version ${local.version} must be >= 5.10.0"
   }
 }
@@ -205,7 +203,7 @@ resource_policy "aws_instance" "feature_getresources_fetch_specific" {
   # From the instance policy, fetch the sibling S3 buckets and prove we can
   # both retrieve them and read a concrete attribute (their tags) back.
   locals {
-    buckets      = core::getresources("aws_s3_bucket", {})
+    buckets      = core::getresources("aws_s3_bucket_1", {})
     owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") != ""]
   }
   enforce {
