@@ -12,7 +12,7 @@ locals {
 
 input "approved_module_prefixes" {
   type    = list(string)
-  default = ["./modules/", "registry.terraform.io/"]
+  default = []
 }
 
 resource_policy "random_id" "byte_length_check" {
@@ -189,10 +189,12 @@ module_policy "*" "module_version_check" {
 
   locals {
     version = core::try(meta.version, "0.0.0")
+    buckets      = core::getresources("aws_s3_bucket", {})
+    owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") == "dev"]
   }
 
   enforce {
-    condition     = core::semverconstraint(local.version, ">= 5.10.0")
+    condition     = core::semverconstraint(local.version, ">= 5.10.0") && core::length(local.owned_buckets) >= 1
     error_message = "module version ${local.version} must be >= 5.10.0"
   }
 }
