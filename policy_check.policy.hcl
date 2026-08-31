@@ -174,7 +174,7 @@ provider_policy "aws" "provider_type_validation" {
 //module policy
 module_policy "*" "module_source_check" {
   locals {
-    source = core::try(meta.source, "") && core::length(core::regexall("zzzz", meta.source)) > 0
+    source = core::try(meta.source, "") && core::try(core::length(core::regexall("zzzz", meta.source)) > 0)
     matches = [
       for prefix in input.approved_module_prefixes : prefix
       if core::length(core::regexall("^${prefix}", local.source)) > 0
