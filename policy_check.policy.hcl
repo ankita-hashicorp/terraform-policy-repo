@@ -147,6 +147,11 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name}"
   }
+  enforce {
+    condition     = core::try(core::length(core::regexall("test", attrs.tags.Name)) != 0, false)
+    error_message = "bucket name tag must not contain 'test'. Current value: ${attrs.tags.Name}"
+    info_message  = "Bucket name tag must not contain 'test'. Current name value: ${attrs.tags.Name}"
+  }
 }
 
 //unknown policy
