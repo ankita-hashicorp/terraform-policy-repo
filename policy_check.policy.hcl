@@ -19,8 +19,8 @@ resource_policy "random_id" "byte_length_check" {
   operations = [ "create" ]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.byte_length > 12 && input.param1 == "val1"
-    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
+    condition     = attrs.byte_length > 12 && input.param1 == "val1" && var.param1 == "val1"
+    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1} and var ${var.param1}"
   }
 }
 
@@ -147,11 +147,6 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name}"
     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name}"
   }
-  enforce {
-    condition     = core::try(core::length(core::regexall("zzz", attrs.tags.Name)) > 0)
-    error_message = "bucket name tag must not contain 'test'. Current value: ${attrs.tags.Name}"
-    info_message  = "Bucket name tag must not contain 'test'. Current name value: ${attrs.tags.Name}"
-  }
 }
 
 //unknown policy
@@ -174,7 +169,7 @@ provider_policy "aws" "provider_type_validation" {
 //module policy
 module_policy "*" "module_source_check" {
   locals {
-    source = core::try(meta.source, "") && core::try(core::length(core::regexall("zzzz", meta.source)) > 0)
+    source = core::try(meta.source, "")
     matches = [
       for prefix in input.approved_module_prefixes : prefix
       if core::length(core::regexall("^${prefix}", local.source)) > 0
