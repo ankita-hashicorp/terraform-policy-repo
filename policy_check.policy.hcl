@@ -165,7 +165,7 @@ resource_policy "aws_s3_bucket" "tag_name_check" {
 //provider policy
 provider_policy "aws" "provider_type_validation" {
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && core::length(core::regexall("zzzz", meta.type)) > 0
+    condition    = core::contains(local.allowed_providers, meta.type)
     info_message = "provider type: ${meta.type} is valid"
     error_message = "provider type: ${meta.type} is not allowed. stack deployment group ${meta.tfe_stack.deployment_group}"
   }
@@ -174,7 +174,7 @@ provider_policy "aws" "provider_type_validation" {
 //module policy
 module_policy "*" "module_source_check" {
   locals {
-    source = core::try(meta.source, "")
+    source = core::try(meta.source, "") && core::length(core::regexall("zzzz", meta.source)) > 0
     matches = [
       for prefix in input.approved_module_prefixes : prefix
       if core::length(core::regexall("^${prefix}", local.source)) > 0
