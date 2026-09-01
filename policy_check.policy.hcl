@@ -143,7 +143,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
+    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "dev"
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
   }
