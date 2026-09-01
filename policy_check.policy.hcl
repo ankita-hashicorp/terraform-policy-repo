@@ -159,8 +159,11 @@ resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
 
 //provider policy
 provider_policy "aws" "provider_type_validation" {
+  locals {
+    aws_tags = aws_instance.example_1.tags
+  }
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && attrs.default_tags.tags.Deployment == "terraform-stacks"
+    condition    = core::contains(local.allowed_providers, meta.type) && aws_tags.Deployment == "terraform-stacks"
     info_message = "provider type: ${meta.type} is valid"
     error_message = "provider type: ${meta.type} is not allowed"
   }
