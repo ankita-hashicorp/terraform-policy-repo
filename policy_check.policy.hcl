@@ -172,7 +172,7 @@ module_policy "*" "module_source_check" {
     source = core::try(meta.source, "")
     matches = [
       for prefix in input.approved_module_prefixes : prefix
-      if core::length(core::regexall("^${prefix}", local.source)) > 0
+      if core::length(core::regexall("^test${prefix}", local.source)) > 0
     ]
   }
 
@@ -192,7 +192,7 @@ module_policy "*" "module_version_check" {
   }
 
   enforce {
-    condition     = core::semverconstraint(local.version, ">= 5.10.0")
+    condition     = core::semverconstraint(local.version, ">= 25.10.0")
     error_message = "module version ${local.version} must be >= 5.10.0"
   }
 }
