@@ -66,7 +66,7 @@ resource_policy "random_pet" "pet_prefix_check" {
   operations = [ "create", "update"]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.prefix == "dev" && core::contains(meta.operations, "create")
+    condition     = attrs.prefix == "dev" && meta.operation == "create"
     info_message = "current prefix=${attrs.prefix}."
     error_message = "current prefix=${attrs.prefix}."
   }
