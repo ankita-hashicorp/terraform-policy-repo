@@ -163,7 +163,7 @@ provider_policy "aws" "provider_type_validation" {
     aws_tags =  core::try(attrs.default_tags.tags, core::try(attrs.default_tags[0].tags, {}))
   }
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && core::try(local.aws_tags["Deployment"], "") == "terraform-stacks"
+    condition    = core::contains(local.allowed_providers, meta.type) && core::try(local.aws_tags["Deployment"], "") == "stacks"
     info_message = "provider type: ${meta.type} is valid"
     error_message = "provider type: ${meta.type} is not allowed"
   }
