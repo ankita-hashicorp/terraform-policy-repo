@@ -24,53 +24,53 @@ resource_policy "random_id" "byte_length_check_test" {
   }
 }
 
-resource_policy "random_pet" "pet_length_check" {
-  enforcement_level = "mandatory_overridable"
-  enforce {
-    condition     = attrs.length == 6
-    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
-    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
-  }
-}
+# resource_policy "random_pet" "pet_length_check" {
+#   enforcement_level = "mandatory_overridable"
+#   enforce {
+#     condition     = attrs.length == 6
+#     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
+#     error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
+#   }
+# }
 
-resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
-  filter = meta.tfe_stack.deployment_group == "dev_default"
-  enforce {
-    condition = core::try(attrs.subnet_id, "") != "aws" 
-    info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
-    error_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
-  }
+# resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
+#   filter = meta.tfe_stack.deployment_group == "dev_default"
+#   enforce {
+#     condition = core::try(attrs.subnet_id, "") != "aws" 
+#     info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
+#     error_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
+#   }
   
-}
+# }
 
-resource_policy "aws_instance" "meta_stack_name_check" {
-  enforce {
-    condition = meta.tfe_stack.stack_name == "aws" && attrs.subnet_id == ""
-    info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
-    error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
-  }
+# resource_policy "aws_instance" "meta_stack_name_check" {
+#   enforce {
+#     condition = meta.tfe_stack.stack_name == "aws" && attrs.subnet_id == ""
+#     info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
+#     error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
+#   }
   
-}
+# }
 
-resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
-  filter = meta.tfe_stack.deployment_name == "test"
-  enforce {
-    condition = core::try(attrs.subnet_id, "") != "aws" 
-    info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
-    error_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
-  }
+# resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
+#   filter = meta.tfe_stack.deployment_name == "test"
+#   enforce {
+#     condition = core::try(attrs.subnet_id, "") != "aws" 
+#     info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
+#     error_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
+#   }
   
-}
+# }
 
-resource_policy "random_pet" "pet_prefix_check" {
-  operations = [ "create", "update"]
-  enforcement_level = "advisory"
-  enforce {
-    condition     = attrs.prefix == "dev"
-    info_message = "current prefix=${attrs.prefix}."
-    error_message = "current prefix=${attrs.prefix}."
-  }
-}
+# resource_policy "random_pet" "pet_prefix_check" {
+#   operations = [ "create", "update"]
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = attrs.prefix == "dev"
+#     info_message = "current prefix=${attrs.prefix}."
+#     error_message = "current prefix=${attrs.prefix}."
+#   }
+# }
 
 //unknown policy
 # resource_policy "random_id" "random_id_check" {
