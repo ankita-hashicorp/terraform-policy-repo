@@ -66,7 +66,7 @@ resource_policy "random_pet" "pet_prefix_check" {
   operations = [ "create", "update"]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.prefix == "dev"
+    condition     = attrs.prefix == "dev" && core::contains(meta.operations, "create")
     info_message = "current prefix=${attrs.prefix}."
     error_message = "current prefix=${attrs.prefix}."
   }
@@ -142,9 +142,8 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 
 resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
   enforcement_level = "mandatory_overridable"
-  operations = [ "delete" ]
   enforce {
-    condition     = core::try(prior_attrs.tags.Name != "", false) && prior_attrs.tags.Environment == "prod"
+    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
   }
