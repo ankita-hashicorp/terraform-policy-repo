@@ -107,7 +107,7 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
   }
   enforce {
     condition     = core::try(attrs.monitoring == false, false) && local.param1 == "test"
-    info_message = "Monitoring enabled: ${attrs.monitoring} param1: ${local.param1}"
+    error_message = "Monitoring enabled: ${attrs.monitoring} param1: ${local.param1}"
   }
 
   enforce {
