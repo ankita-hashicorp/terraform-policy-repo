@@ -102,8 +102,11 @@ resource_policy "random_shuffle" "result_count_check" {
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
   enforcement_level = "advisory"
+  locals {
+    param1 = "test"
+  }
   enforce {
-    condition     = core::try(attrs.monitoring == false, false)
+    condition     = core::try(attrs.monitoring == false, false) && local.param1 == "test"
     info_message = "Monitoring enabled: ${attrs.monitoring}"
   }
 
@@ -116,8 +119,11 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
 
 resource_policy "aws_instance" "aws_instance_key_name_check" {
   enforcement_level = "advisory"
+  locals {
+    param1 = "test1"
+  }
   enforce {
-    condition     = core::try(attrs.key_name == "example-key-3", false)
+    condition     = core::try(attrs.key_name == "example-key-3", false) && local.param1 == "test1"
     info_message = "Current value: ${attrs.key_name}"
     error_message = "key_name must be example-key-3"
   }
