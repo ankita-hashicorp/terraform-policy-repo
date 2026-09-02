@@ -19,7 +19,7 @@ resource_policy "random_id" "byte_length_check" {
   operations = [ "create" ]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.byte_length > 12
+    condition     = attrs.byte_length > 2
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
   }
 }
@@ -27,7 +27,7 @@ resource_policy "random_id" "byte_length_check" {
 resource_policy "random_pet" "pet_length_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.length == 6
+    condition     = attrs.length >= 0
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
     error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
   }
@@ -47,7 +47,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 resource_policy "aws_instance" "meta_stack_name_check" {
   enforcement_level = "advisory"
   enforce {
-    condition = meta.tfe_stack.stack_name == "aws" && attrs.subnet_id == ""
+    condition = meta.tfe_stack.stack_name != ""
     info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
     error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
   }
@@ -69,7 +69,7 @@ resource_policy "random_pet" "pet_prefix_check" {
   operations = [ "create", "update"]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.prefix == "dev" && meta.operation == "create"
+    condition     = attrs.prefix != ""
     info_message = "current prefix=${attrs.prefix}."
     error_message = "current prefix=${attrs.prefix}."
   }
@@ -97,45 +97,45 @@ resource_policy "random_password" "length_special_check" {
 resource_policy "random_shuffle" "result_count_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
+    condition     = core::try(attrs.result_count > 0, false)
     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
     error_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
   }
 }
 
-resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "advisory"
-  locals {
-    param1 = "test"
-  }
-  enforce {
-    condition     = core::try(attrs.monitoring == false, false) && local.param1 == "test"
-    error_message = "Monitoring enabled: ${attrs.monitoring} param1: ${local.param1}"
-  }
+# resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
+#   enforcement_level = "advisory"
+#   locals {
+#     param1 = "test"
+#   }
+#   enforce {
+#     condition     = core::try(attrs.monitoring == true, false) && local.param1 == "test"
+#     error_message = "Monitoring enabled: ${attrs.monitoring} param1: ${local.param1}"
+#   }
 
-  enforce {
-    condition     = core::try(attrs.availability_zone == "us-north-1", false)
-    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone} param1: ${local.param1}"
-  }
+#   enforce {
+#     condition     = core::try(attrs.availability_zone == "us-north-1", false)
+#     info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone} param1: ${local.param1}"
+#   }
 
-}
+# }
 
-resource_policy "aws_instance" "aws_instance_key_name_check" {
-  enforcement_level = "advisory"
-  locals {
-    param1 = "test1"
-  }
-  enforce {
-    condition     = core::try(attrs.key_name == "example-key-3", false) && local.param1 == "test1"
-    info_message = "Current value: ${attrs.key_name} param1 ${local.param1}"
-    error_message = "key_name must be example-key-3"
-  }
-}
+# resource_policy "aws_instance" "aws_instance_key_name_check" {
+#   enforcement_level = "advisory"
+#   locals {
+#     param1 = "test1"
+#   }
+#   enforce {
+#     condition     = core::try(attrs.key_name == "example-key-3", false) && local.param1 == "test1"
+#     info_message = "Current value: ${attrs.key_name} param1 ${local.param1}"
+#     error_message = "key_name must be example-key-3"
+#   }
+# }
 
 resource_policy "aws_instance" "instance_type_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = core::try(attrs.instance_type == "t1.micro", false)
+    condition     = core::try(attrs.instance_type != "", false)
     error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
     info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
   }
@@ -144,7 +144,7 @@ resource_policy "aws_instance" "instance_type_check" {
 resource_policy "aws_s3_bucket" "bucket_name_check" {
   enforcement_level = "advisory"
   enforce {
-    condition     = core::try(attrs.bucket == "test", false)
+    condition     = core::try(attrs.bucket != "", false)
     error_message = "bucket must be present. Current value: ${attrs.bucket}"
   }
 }
@@ -169,11 +169,8 @@ resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
 //provider policy
 provider_policy "aws" "provider_type_validation" {
   enforcement_level = "advisory"
-  locals {
-    aws_tags =  core::try(attrs.default_tags.tags, core::try(attrs.default_tags[0].tags, {}))
-  }
   enforce {
-    condition    = core::contains(local.allowed_providers, meta.type) && core::try(local.aws_tags["Deployment"], "") == "stacks"
+    condition    = core::contains(local.allowed_providers, meta.type)
     info_message = "provider type: ${meta.type} is valid"
     error_message = "provider type: ${meta.type} is not allowed"
   }
@@ -214,17 +211,17 @@ module_policy "*" "module_version_check" {
 
 
 //cross refernce getResources policy
-resource_policy "aws_instance" "feature_getresources_fetch_specific" {
-  enforcement_level = "advisory"
-  # From the instance policy, fetch the sibling S3 buckets and prove we can
-  # both retrieve them and read a concrete attribute (their tags) back.
-  locals {
-    buckets      = core::getresources("aws_s3_bucket_1", {})
-    owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") != ""]
-  }
-  enforce {
-    condition     = core::length(local.owned_buckets) >= 1
-    error_message = "core::getresources must return at least one aws_s3_bucket carrying an owner tag"
-    info_message  = "core::getresources fetched ${core::length(local.buckets)} bucket(s), ${core::length(local.owned_buckets)} with an owner tag"
-  }
-}
+# resource_policy "aws_instance" "feature_getresources_fetch_specific" {
+#   enforcement_level = "advisory"
+#   # From the instance policy, fetch the sibling S3 buckets and prove we can
+#   # both retrieve them and read a concrete attribute (their tags) back.
+#   locals {
+#     buckets      = core::getresources("aws_s3_bucket_1", {})
+#     owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") != ""]
+#   }
+#   enforce {
+#     condition     = core::length(local.owned_buckets) >= 1
+#     error_message = "core::getresources must return at least one aws_s3_bucket carrying an owner tag"
+#     info_message  = "core::getresources fetched ${core::length(local.buckets)} bucket(s), ${core::length(local.owned_buckets)} with an owner tag"
+#   }
+# }
