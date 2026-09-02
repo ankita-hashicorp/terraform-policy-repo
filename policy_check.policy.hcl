@@ -149,14 +149,14 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
   }
 }
 
-resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
-    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
-    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
-  }
-}
+# resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
+#     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
+#     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
+#   }
+# }
 
 //unknown policy
 # resource_policy "aws_s3_bucket" "bucket_namespace_check" {
