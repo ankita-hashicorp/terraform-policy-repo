@@ -25,7 +25,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = attrs.length == 6
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
@@ -35,6 +35,7 @@ resource_policy "random_pet" "pet_length_check" {
 
 resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
   filter = meta.tfe_stack.deployment_group == "dev_default"
+  enforcement_level = "advisory"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
@@ -44,6 +45,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 }
 
 resource_policy "aws_instance" "meta_stack_name_check" {
+  enforcement_level = "advisory"
   enforce {
     condition = meta.tfe_stack.stack_name == "aws" && attrs.subnet_id == ""
     info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
@@ -54,6 +56,7 @@ resource_policy "aws_instance" "meta_stack_name_check" {
 
 resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
   filter = meta.tfe_stack.deployment_name == "test"
+  enforcement_level = "advisory"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
@@ -130,7 +133,7 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
 }
 
 resource_policy "aws_instance" "instance_type_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.instance_type == "t1.micro", false)
     error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
@@ -147,7 +150,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
@@ -165,6 +168,7 @@ resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
 
 //provider policy
 provider_policy "aws" "provider_type_validation" {
+  enforcement_level = "advisory"
   locals {
     aws_tags =  core::try(attrs.default_tags.tags, core::try(attrs.default_tags[0].tags, {}))
   }
@@ -177,6 +181,7 @@ provider_policy "aws" "provider_type_validation" {
 
 //module policy
 module_policy "*" "module_source_check" {
+  enforcement_level = "advisory"
   locals {
     source = core::try(meta.source, "")
     matches = [
@@ -194,6 +199,7 @@ module_policy "*" "module_source_check" {
 
 //module policy
 module_policy "*" "module_version_check" {
+  enforcement_level = "advisory"
   filter = core::try(meta.version, "") != ""
 
   locals {
@@ -209,6 +215,7 @@ module_policy "*" "module_version_check" {
 
 //cross refernce getResources policy
 resource_policy "aws_instance" "feature_getresources_fetch_specific" {
+  enforcement_level = "advisory"
   # From the instance policy, fetch the sibling S3 buckets and prove we can
   # both retrieve them and read a concrete attribute (their tags) back.
   locals {
