@@ -25,7 +25,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = attrs.length == 6
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
@@ -45,7 +45,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 }
 
 resource_policy "aws_instance" "meta_stack_name_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition = meta.tfe_stack.stack_name != "" && attrs.subnet_id == ""
     info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
@@ -56,7 +56,7 @@ resource_policy "aws_instance" "meta_stack_name_check" {
 
 resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
   filter = meta.tfe_stack.deployment_name == "test"
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
@@ -104,7 +104,7 @@ resource_policy "random_shuffle" "result_count_check" {
 }
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   locals {
     param1 = "test"
   }
