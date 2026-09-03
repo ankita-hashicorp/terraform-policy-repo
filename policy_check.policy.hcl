@@ -2,7 +2,7 @@ policy {}
 
 input "param1" {
   type = string
-  # default = "val1"
+  default = "val1"
 }
 
 locals {
