@@ -76,14 +76,14 @@ resource_policy "random_pet" "pet_prefix_check" {
 }
 
 //unknown policy
-resource_policy "random_id" "random_id_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = attrs.id != "" && input.param1 == "val1"
-    info_message = "id must be present"
-    error_message = "id must be present"
-  }
-}
+# resource_policy "random_id" "random_id_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = attrs.id != "" && input.param1 == "val1"
+#     info_message = "id must be present"
+#     error_message = "id must be present"
+#   }
+# }
 
 resource_policy "random_password" "length_special_check" {
   enforcement_level = "advisory"
