@@ -25,7 +25,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.length == 6
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
@@ -104,7 +104,7 @@ resource_policy "random_shuffle" "result_count_check" {
 }
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   locals {
     param1 = "test"
   }
