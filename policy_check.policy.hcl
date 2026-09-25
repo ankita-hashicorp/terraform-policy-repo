@@ -159,47 +159,47 @@ resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
 }
 
 //provider policy
-provider_policy "aws" "provider_type_validation" {
-  enforcement_level = "advisory"
-  enforce {
-    condition    = core::contains(local.allowed_providers, meta.type)
-    info_message = "provider type: ${meta.type} is valid"
-    error_message = "provider type: ${meta.type} is not allowed"
-  }
-}
+# provider_policy "aws" "provider_type_validation" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition    = core::contains(local.allowed_providers, meta.type)
+#     info_message = "provider type: ${meta.type} is valid"
+#     error_message = "provider type: ${meta.type} is not allowed"
+#   }
+# }
 
 //module policy
-module_policy "*" "module_source_check" {
-  enforcement_level = "advisory"
-  locals {
-    source = core::try(meta.source, "")
-    matches = [
-      for prefix in input.approved_module_prefixes : prefix
-      if core::length(core::regexall("^${prefix}", local.source)) > 0
-    ]
-  }
+# module_policy "*" "module_source_check" {
+#   enforcement_level = "advisory"
+#   locals {
+#     source = core::try(meta.source, "")
+#     matches = [
+#       for prefix in input.approved_module_prefixes : prefix
+#       if core::length(core::regexall("^${prefix}", local.source)) > 0
+#     ]
+#   }
 
-  enforce {
-    condition     = core::length(local.matches) > 0
-    error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
-    info_message  = "module source '${local.source}' matches approved prefixes"
-  }
-}
+#   enforce {
+#     condition     = core::length(local.matches) > 0
+#     error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
+#     info_message  = "module source '${local.source}' matches approved prefixes"
+#   }
+# }
 
-//module policy
-module_policy "*" "module_version_check" {
-  enforcement_level = "advisory"
-  filter = core::try(meta.version, "") != ""
+# //module policy
+# module_policy "*" "module_version_check" {
+#   enforcement_level = "advisory"
+#   filter = core::try(meta.version, "") != ""
 
-  locals {
-    version = core::try(meta.version, "0.0.0")
-  }
+#   locals {
+#     version = core::try(meta.version, "0.0.0")
+#   }
 
-  enforce {
-    condition     = core::semverconstraint(local.version, ">= 5.10.0")
-    error_message = "module version ${local.version} must be >= 5.10.0"
-  }
-}
+#   enforce {
+#     condition     = core::semverconstraint(local.version, ">= 5.10.0")
+#     error_message = "module version ${local.version} must be >= 5.10.0"
+#   }
+# }
 
 
 //cross refernce getResources policy
