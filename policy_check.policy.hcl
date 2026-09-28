@@ -17,7 +17,7 @@ input "approved_module_prefixes" {
 
 resource_policy "random_id" "byte_length_check" {
   operations = [ "create" ]
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.byte_length > 2
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
@@ -25,7 +25,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.length == 6
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
@@ -35,7 +35,7 @@ resource_policy "random_pet" "pet_length_check" {
 
 resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
   filter = meta.tfe_stack.deployment_group == "dev_default"
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "mandatory"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
@@ -48,8 +48,8 @@ resource_policy "aws_instance" "meta_stack_name_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
     condition = meta.tfe_stack.stack_name != ""
-    info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
-    error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
+    info_message = "meta stack name: ${meta.tfe_stack.stack_name}"
+    error_message = "meta stack name: ${meta.tfe_stack.stack_name}"
   }
   
 }
@@ -95,7 +95,7 @@ resource_policy "random_password" "length_special_check" {
 }
 
 resource_policy "random_shuffle" "result_count_check" {
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
     condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
