@@ -25,6 +25,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
+  operations = [ "create", "update", "delete"]
   enforcement_level = "mandatory"
   enforce {
     condition     = attrs.length == 6
@@ -34,6 +35,7 @@ resource_policy "random_pet" "pet_length_check" {
 }
 
 resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
+  operations = [ "create", "update", "delete"]
   filter = meta.tfe_stack.deployment_group == "dev_default"
   enforcement_level = "mandatory"
   enforce {
@@ -45,6 +47,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 }
 
 resource_policy "aws_instance" "meta_stack_name_check" {
+  operations = [ "create", "update", "delete"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition = meta.tfe_stack.stack_name != ""
@@ -55,6 +58,7 @@ resource_policy "aws_instance" "meta_stack_name_check" {
 }
 
 resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
+  operations = [ "create", "update", "delete"]
   filter = meta.tfe_stack.deployment_name == "test"
   enforcement_level = "mandatory_overridable"
   enforce {
@@ -66,7 +70,7 @@ resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
 }
 
 resource_policy "random_pet" "pet_prefix_check" {
-  operations = [ "create", "update"]
+  operations = [ "create", "update", "delete"]
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.prefix == "dev" && meta.operation == "create"
@@ -104,7 +108,8 @@ resource_policy "random_shuffle" "result_count_check" {
 }
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  enforcement_level = "advisory"
+  operations = [ "create", "update", "delete"]
+  enforcement_level = "mandatory"
   locals {
     param1 = "test"
   }
@@ -121,23 +126,25 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
 }
 
 resource_policy "aws_instance" "aws_instance_key_name_check" {
-  enforcement_level = "advisory"
+  operations = [ "create", "update", "delete"]
+  enforcement_level = "mandatory"
   locals {
     param1 = "test1"
   }
   enforce {
     condition     = core::try(attrs.key_name == "example-key-3", false) && local.param1 == "test1"
     info_message = "Current value: ${attrs.key_name} param1 ${local.param1}"
-    error_message = "key_name must be example-key-3"
+    error_message = "key_name must be example-key-3."
   }
 }
 
 resource_policy "aws_instance" "instance_type_check" {
-  enforcement_level = "advisory"
+  operations = [ "create", "update", "delete"]
+  enforcement_level = "mandatory"
   enforce {
     condition     = core::try(attrs.instance_type != "", false)
-    error_message = "instance_type must be t2.micro. Current value: ${attrs.instance_type}"
-    info_message = "Instance_type must be t2.micro. Current instance_type value: ${attrs.instance_type}"
+    error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
+    info_message = "Instance_type must be t2.micro. Current instance_type value is: ${attrs.instance_type}"
   }
 }
 
