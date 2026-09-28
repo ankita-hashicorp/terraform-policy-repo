@@ -16,7 +16,8 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  enforcement_level = "advisory"
+  operations = [ "delete"]
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.byte_length > 2
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
@@ -24,8 +25,8 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  operations = [ "create", "update"]
-  enforcement_level = "advisory"
+  operations = [ "delete"]
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.length == 6
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
