@@ -25,7 +25,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   enforcement_level = "mandatory"
   enforce {
     condition     = attrs.length == 6
