@@ -47,7 +47,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 resource_policy "aws_instance" "meta_stack_name_check" {
   enforcement_level = "mandatory_overridable"
   enforce {
-    condition = meta.tfe_stack.stack_name != "" && attrs.subnet_id == ""
+    condition = meta.tfe_stack.stack_name != ""
     info_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
     error_message = "subnet Id should be present. meta stack name: ${meta.tfe_stack.stack_name}"
   }
