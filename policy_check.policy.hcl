@@ -49,6 +49,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 resource_policy "aws_instance" "meta_stack_name_check" {
   operations = [ "create", "update"]
   enforcement_level = "mandatory_overridable"
+  test=true
   enforce {
     condition = meta.tfe_stack.stack_name != ""
     info_message = "meta stack name: ${meta.tfe_stack.stack_name}"
