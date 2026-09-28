@@ -35,7 +35,7 @@ resource_policy "random_pet" "pet_length_check" {
 }
 
 resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   filter = meta.tfe_stack.deployment_group == "dev_default"
   enforcement_level = "mandatory"
   enforce {
@@ -47,7 +47,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 }
 
 resource_policy "aws_instance" "meta_stack_name_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition = meta.tfe_stack.stack_name != ""
@@ -58,7 +58,7 @@ resource_policy "aws_instance" "meta_stack_name_check" {
 }
 
 resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   filter = meta.tfe_stack.deployment_name == "test"
   enforcement_level = "mandatory_overridable"
   enforce {
@@ -70,7 +70,7 @@ resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
 }
 
 resource_policy "random_pet" "pet_prefix_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.prefix == "dev" && meta.operation == "create"
@@ -108,7 +108,7 @@ resource_policy "random_shuffle" "result_count_check" {
 }
 
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   enforcement_level = "mandatory"
   locals {
     param1 = "test"
@@ -126,7 +126,7 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
 }
 
 resource_policy "aws_instance" "aws_instance_key_name_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   enforcement_level = "mandatory"
   locals {
     param1 = "test1"
@@ -139,7 +139,7 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
 }
 
 resource_policy "aws_instance" "instance_type_check" {
-  operations = [ "create", "update", "delete"]
+  operations = [ "create", "update"]
   enforcement_level = "mandatory"
   enforce {
     condition     = core::try(attrs.instance_type != "", false)
