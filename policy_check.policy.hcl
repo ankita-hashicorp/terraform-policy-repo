@@ -117,7 +117,7 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
 
   enforce {
     condition     = core::try(attrs.availability_zone == "us-north-1", false)
-    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone} param1: ${input.param1}"
+    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone} param1: ${input.param1}. adding a really long info message to check UI orientation is correct or not bdbdhdbddjdbdjb"
   }
 
 }
