@@ -110,17 +110,14 @@ resource_policy "random_shuffle" "result_count_check" {
 resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
   operations = [ "create", "update"]
   enforcement_level = "advisory"
-  locals {
-    param1 = "test"
-  }
   enforce {
-    condition     = core::try(attrs.monitoring == true, false) && local.param1 == "test"
-    error_message = "Monitoring enabled: ${attrs.monitoring} param1: ${local.param1}"
+    condition     = core::try(attrs.monitoring == true, false) && input.param1 == "test"
+    error_message = "Monitoring enabled: ${attrs.monitoring} param1: ${input.param1}"
   }
 
   enforce {
     condition     = core::try(attrs.availability_zone == "us-north-1", false)
-    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone} param1: ${local.param1}"
+    info_message = "Availability zone must be us-north-1. Current value: ${attrs.availability_zone} param1: ${input.param1}"
   }
 
 }
@@ -128,12 +125,9 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check" {
 resource_policy "aws_instance" "aws_instance_key_name_check" {
   operations = [ "create", "update"]
   enforcement_level = "mandatory"
-  locals {
-    param1 = "test1"
-  }
   enforce {
-    condition     = core::try(attrs.key_name == "example-key-3", false) && local.param1 == "test1"
-    info_message = "Current value: ${attrs.key_name} param1 ${local.param1}"
+    condition     = core::try(attrs.key_name == "example-key-3", false) && input.param1 == "test1"
+    info_message = "Current value: ${attrs.key_name} param1 ${input.param1}"
     error_message = "key_name must be example-key-3."
   }
 }
