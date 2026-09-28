@@ -16,7 +16,7 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  operations = [ "delete"]
+  operations = [ "update", "delete"]
   enforcement_level = "mandatory"
   enforce {
     condition     = attrs.byte_length > 2
@@ -25,7 +25,7 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  operations = [ "delete"]
+  operations = [ "update", "delete"]
   enforcement_level = "mandatory"
   enforce {
     condition     = attrs.length == 6
