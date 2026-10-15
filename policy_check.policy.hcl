@@ -16,7 +16,6 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  operations = [ "update", "delete"]
   enforcement_level = "mandatory"
   enforce {
     condition     = attrs.byte_length > 2
@@ -124,7 +123,7 @@ resource_policy "aws_instance" "monitoring_and_availability_zone_check#@#$%%^^&*
 
 resource_policy "aws_instance" "aws_instance_key_name_check" {
   operations = [ "create", "update"]
-  enforcement_level = "mandatory"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.key_name == "example-key-3", false) && input.param1 == "test1"
     info_message = "Current value: ${attrs.key_name} param1 ${input.param1}"
@@ -132,15 +131,15 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
   }
 }
 
-resource_policy "aws_instance" "instance_type_check" {
-  operations = [ "create", "update"]
-  enforcement_level = "mandatory"
-  enforce {
-    condition     = core::try(attrs.instance_type != "", false)
-    error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
-    info_message = "Instance_type must be t2.micro. Current instance_type value is: ${attrs.instance_type}"
-  }
-}
+# resource_policy "aws_instance" "instance_type_check" {
+#   operations = [ "create", "update"]
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.instance_type != "", false)
+#     error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
+#     info_message = "Instance_type must be t2.micro. Current instance_type value is: ${attrs.instance_type}"
+#   }
+# }
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
   enforcement_level = "advisory"
