@@ -131,18 +131,17 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
   }
 }
 
-# resource_policy "aws_instance" "instance_type_check" {
-#   operations = [ "create", "update"]
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition     = core::try(attrs.instance_type != "", false)
-#     error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
-#     info_message = "Instance_type must be t2.micro. Current instance_type value is: ${attrs.instance_type}"
-#   }
-# }
+resource_policy "aws_instance" "instance_type_check" {
+  enforcement_level = "mandatory"
+  enforce {
+    condition     = core::try(attrs.instance_type != "", false)
+    error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
+    info_message = "Instance_type must be t2.micro. Current instance_type value is: ${attrs.instance_type}"
+  }
+}
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
     condition     = core::try(attrs.bucket == "test", false)
     error_message = "bucket must be present. Current value: ${attrs.bucket}"
