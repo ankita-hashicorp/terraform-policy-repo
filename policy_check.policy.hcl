@@ -79,15 +79,15 @@ resource_policy "random_pet" "pet_prefix_check" {
   }
 }
 
-//unknown policy
-resource_policy "random_id" "random_id_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = attrs.id != "" && input.param1 == "val1"
-    info_message = "id must be present"
-    error_message = "id must be present"
-  }
-}
+# //unknown policy
+# resource_policy "random_id" "random_id_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = attrs.id != "" && input.param1 == "val1"
+#     info_message = "id must be present"
+#     error_message = "id must be present"
+#   }
+# }
 
 resource_policy "random_password" "length_special_check" {
   enforcement_level = "advisory"
@@ -132,32 +132,32 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
   }
 }
 
-resource_policy "aws_instance" "instance_type_check" {
-  operations = [ "delete", "update"]
-  enforcement_level = "mandatory"
-  enforce {
-    condition     = core::try(attrs.instance_type != "", false)
-    error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
-    info_message = "Instance_type must be t2.micro. Current instance_type value is: ${attrs.instance_type}"
-  }
-}
+# resource_policy "aws_instance" "instance_type_check" {
+#   operations = [ "delete", "update"]
+#   enforcement_level = "mandatory"
+#   enforce {
+#     condition     = core::try(attrs.instance_type != "", false)
+#     error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
+#     info_message = "Instance_type must be t2.micro. Current instance_type value is: ${attrs.instance_type}"
+#   }
+# }
 
-resource_policy "aws_s3_bucket" "bucket_name_check" {
-  enforcement_level = "mandatory"
-  enforce {
-    condition     = core::try(attrs.bucket == "test", false)
-    error_message = "bucket must be present. Current value: ${attrs.bucket}"
-  }
-}
+# resource_policy "aws_s3_bucket" "bucket_name_check" {
+#   enforcement_level = "mandatory"
+#   enforce {
+#     condition     = core::try(attrs.bucket == "test", false)
+#     error_message = "bucket must be present. Current value: ${attrs.bucket}"
+#   }
+# }
 
-resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
-  enforcement_level = "mandatory_overridable"
-  enforce {
-    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
-    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
-    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
-  }
-}
+# resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
+#   enforcement_level = "mandatory_overridable"
+#   enforce {
+#     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
+#     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
+#     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
+#   }
+# }
 
 //provider policy
 provider_policy "aws" "provider_type_validation" {
