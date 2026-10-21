@@ -16,10 +16,11 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
+  operations = [ "delete"]
   enforcement_level = "mandatory"
   enforce {
-    condition     = attrs.byte_length > 2
-    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
+    condition     = prior_attrs.byte_length > 20
+    info_message = "byte_length must be 8. Current value: ${prior_attrs.byte_length} and input ${input.param1}"
   }
 }
 
@@ -80,7 +81,8 @@ resource_policy "random_pet" "pet_prefix_check" {
 
 //unknown policy
 resource_policy "random_id" "random_id_check" {
-  enforcement_level = "advisory"
+  operations = [ "delete"]
+  enforcement_level = "mandatory"
   enforce {
     condition     = attrs.id != "" && input.param1 == "val1"
     info_message = "id must be present"
