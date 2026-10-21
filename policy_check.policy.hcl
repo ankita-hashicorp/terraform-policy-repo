@@ -25,8 +25,8 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  operations = [ "update", "delete"]
-  enforcement_level = "mandatory"
+  operations = [ "no-op"]
+  enforcement_level = "advisory"
   enforce {
     condition     = attrs.length == 6
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
@@ -70,23 +70,12 @@ resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
 }
 
 resource_policy "random_pet" "pet_prefix_check" {
-  operations = [ "create", "update"]
+  operations = [ "create", "no-op"]
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.prefix == "dev" && meta.operation == "create"
     info_message = "current prefix=${attrs.prefix}."
     error_message = "current prefix=${attrs.prefix}."
-  }
-}
-
-# //unknown policy
-resource_policy "random_id" "random_id_check" {
-  operations = [ "no-op", "update"]
-  enforcement_level = "advisory"
-  enforce {
-    condition     = attrs.id != ""
-    info_message = "id must be present"
-    error_message = "id must be present"
   }
 }
 
