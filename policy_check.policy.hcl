@@ -152,13 +152,23 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 
 resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
   enforcement_level = "mandatory_overridable"
-  error=true
   enforce {
     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
   }
 }
+
+//no resource for this policy, just to test the policy engine
+resource_policy "aws_cloudtrail" "tag_name_enviornment_check_no_resource" {
+  enforcement_level = "mandatory_overridable"
+  enforce {
+    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
+    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
+    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
+  }
+}
+
 
 //provider policy
 provider_policy "aws" "provider_type_validation" {
