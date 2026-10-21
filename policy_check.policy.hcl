@@ -16,7 +16,7 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  operations = [ "delete"]
+  operations = [ "no-op"]
   enforcement_level = "mandatory"
   enforce {
     condition     = prior_attrs.byte_length > 20
@@ -80,14 +80,15 @@ resource_policy "random_pet" "pet_prefix_check" {
 }
 
 # //unknown policy
-# resource_policy "random_id" "random_id_check" {
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition     = attrs.id != "" && input.param1 == "val1"
-#     info_message = "id must be present"
-#     error_message = "id must be present"
-#   }
-# }
+resource_policy "random_id" "random_id_check" {
+  operations = [ "no-op", "update"]
+  enforcement_level = "advisory"
+  enforce {
+    condition     = attrs.id != ""
+    info_message = "id must be present"
+    error_message = "id must be present"
+  }
+}
 
 resource_policy "random_password" "length_special_check" {
   enforcement_level = "advisory"
@@ -151,6 +152,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 }
 
 resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
+  operations = [ "create", "no-op"]
   enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
