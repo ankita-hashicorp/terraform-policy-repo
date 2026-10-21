@@ -16,8 +16,7 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  operations = [ "no-op"]
-  enforcement_level = "mandatory"
+  enforcement_level = "advisory"
   enforce {
     condition     = attrs.byte_length > 20
     info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
@@ -25,7 +24,6 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
-  operations = [ "no-op"]
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.length == 6
@@ -37,7 +35,7 @@ resource_policy "random_pet" "pet_length_check" {
 resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
   operations = [ "create", "update"]
   filter = meta.tfe_stack.deployment_group == "dev_default"
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
@@ -124,8 +122,7 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
 }
 
 resource_policy "aws_instance" "instance_type_check" {
-  operations = [ "delete", "update"]
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.instance_type != "", false)
     error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
@@ -134,7 +131,7 @@ resource_policy "aws_instance" "instance_type_check" {
 }
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
-  enforcement_level = "mandatory"
+  enforcement_level = "mandatory_overridable"
   enforce {
     condition     = core::try(attrs.bucket == "test", false)
     error_message = "bucket must be present. Current value: ${attrs.bucket}"
