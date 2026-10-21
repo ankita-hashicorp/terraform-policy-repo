@@ -81,8 +81,7 @@ resource_policy "random_pet" "pet_prefix_check" {
 
 //unknown policy
 resource_policy "random_id" "random_id_check" {
-  operations = [ "delete"]
-  enforcement_level = "mandatory"
+  enforcement_level = "advisory"
   enforce {
     condition     = attrs.id != "" && input.param1 == "val1"
     info_message = "id must be present"
