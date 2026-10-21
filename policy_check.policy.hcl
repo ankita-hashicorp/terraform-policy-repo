@@ -89,6 +89,7 @@ resource_policy "random_password" "length_special_check" {
 }
 
 resource_policy "random_shuffle" "result_count_check" {
+  operations = [ "no-op"]
   enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
