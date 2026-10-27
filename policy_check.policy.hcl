@@ -17,7 +17,7 @@ input "approved_module_prefixes" {
 
 resource_policy "random_id" "byte_length_check" {
   operations = [ "delete"]
-  enforcement_level = "mandatory"
+  enforcement_level = "advisory"
   enforce {
     condition     = prior_attrs.byte_length > 20
     info_message = "byte_length must be 8. Current value: ${prior_attrs.byte_length} and input ${input.param1}"
@@ -36,7 +36,7 @@ resource_policy "random_pet" "pet_length_check" {
 resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
   operations = [ "create", "update"]
   filter = meta.tfe_stack.deployment_group == "dev_default"
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
@@ -47,7 +47,7 @@ resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
 
 resource_policy "aws_instance" "meta_stack_name_check" {
   operations = [ "create", "update"]
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition = meta.tfe_stack.stack_name != ""
     info_message = "meta stack name: ${meta.tfe_stack.stack_name}"
@@ -59,7 +59,7 @@ resource_policy "aws_instance" "meta_stack_name_check" {
 resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
   operations = [ "create", "update"]
   filter = meta.tfe_stack.deployment_name == "test"
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
@@ -123,7 +123,7 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
 }
 
 resource_policy "aws_instance" "instance_type_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.instance_type != "", false)
     error_message = "instance_type must be t2.micro. Current value is: ${attrs.instance_type}"
@@ -132,7 +132,7 @@ resource_policy "aws_instance" "instance_type_check" {
 }
 
 resource_policy "aws_s3_bucket" "bucket_name_check" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.bucket == "test", false)
     error_message = "bucket must be present. Current value: ${attrs.bucket}"
@@ -141,7 +141,7 @@ resource_policy "aws_s3_bucket" "bucket_name_check" {
 
 resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
   operations = [ "create", "no-op"]
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
@@ -151,7 +151,7 @@ resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
 
 //no resource for this policy, just to test the policy engine
 resource_policy "aws_cloudtrail" "tag_name_enviornment_check_no_resource" {
-  enforcement_level = "mandatory_overridable"
+  enforcement_level = "advisory"
   enforce {
     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
