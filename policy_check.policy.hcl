@@ -24,11 +24,21 @@ resource_policy "random_id" "byte_length_check" {
   }
 }
 
-resource_policy "random_pet" "pet_length_check" {
-  operations = [ "delete"]
+resource_policy "random_pet" "pet_length_check_delete" {
+  operations = [ "delete",]
   enforcement_level = "advisory"
   enforce {
     condition     = prior_attrs.length == 6
+    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}."
+    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
+  }
+}
+
+resource_policy "random_pet" "pet_length_check_create" {
+  operations = [ "create",]
+  enforcement_level = "advisory"
+  enforce {
+    condition     = attrs.length == 6
     info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}."
     error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
   }
@@ -69,11 +79,21 @@ resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
   
 }
 
-resource_policy "random_pet" "pet_prefix_check" {
+resource_policy "random_pet" "pet_prefix_check_create" {
+  operations = [ "create"]
+  enforcement_level = "advisory"
+  enforce {
+    condition     = attrs.prefix == "dev" && meta.operation == "create"
+    info_message = "current prefix=${attrs.prefix}."
+    error_message = "current prefix=${attrs.prefix}."
+  }
+}
+
+resource_policy "random_pet" "pet_prefix_check_delete" {
   operations = [ "delete"]
   enforcement_level = "advisory"
   enforce {
-    condition     = prior_attrs.prefix == "dev" && meta.operation == "create"
+    condition     = prior_attrs.prefix == "dev" && meta.operation == "delete"
     info_message = "current prefix=${prior_attrs.prefix}."
     error_message = "current prefix=${prior_attrs.prefix}."
   }
