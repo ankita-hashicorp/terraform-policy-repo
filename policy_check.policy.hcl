@@ -17,7 +17,7 @@ input "approved_module_prefixes" {
 
 resource_policy "random_id" "byte_length_check" {
   operations = [ "delete"]
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
     condition     = prior_attrs.byte_length > 20
     info_message = "byte_length must be 8. Current value: ${prior_attrs.byte_length} and input ${input.param1}"
@@ -25,11 +25,12 @@ resource_policy "random_id" "byte_length_check" {
 }
 
 resource_policy "random_pet" "pet_length_check" {
+  operations = [ "delete"]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.length == 6
-    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
-    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
+    condition     = prior_attrs.length == 6
+    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}."
+    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
   }
 }
 
@@ -69,12 +70,12 @@ resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
 }
 
 resource_policy "random_pet" "pet_prefix_check" {
-  operations = [ "create", "no-op"]
+  operations = [ "delete"]
   enforcement_level = "advisory"
   enforce {
-    condition     = attrs.prefix == "dev" && meta.operation == "create"
-    info_message = "current prefix=${attrs.prefix}."
-    error_message = "current prefix=${attrs.prefix}."
+    condition     = prior_attrs.prefix == "dev" && meta.operation == "create"
+    info_message = "current prefix=${prior_attrs.prefix}."
+    error_message = "current prefix=${prior_attrs.prefix}."
   }
 }
 
