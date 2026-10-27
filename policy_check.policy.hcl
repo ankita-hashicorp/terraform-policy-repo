@@ -16,10 +16,11 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  enforcement_level = "advisory"
+  operations = [ "delete"]
+  enforcement_level = "mandatory"
   enforce {
-    condition     = attrs.byte_length > 20
-    info_message = "byte_length must be 8. Current value: ${attrs.byte_length} and input ${input.param1}"
+    condition     = prior_attrs.byte_length > 20
+    info_message = "byte_length must be 8. Current value: ${prior_attrs.byte_length} and input ${input.param1}"
   }
 }
 
@@ -171,6 +172,7 @@ provider_policy "aws" "provider_type_validation" {
 
 //module policy
 module_policy "*" "module_source_check" {
+  operations = [ "delete" ]
   enforcement_level = "advisory"
   locals {
     source = core::try(meta.source, "")
