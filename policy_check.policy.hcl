@@ -39,8 +39,8 @@ resource_policy "random_pet" "pet_length_check_create" {
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.length == 6
-    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}."
-    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${prior_attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
+    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
+    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
   }
 }
 
