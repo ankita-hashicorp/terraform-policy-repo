@@ -172,7 +172,6 @@ provider_policy "aws" "provider_type_validation" {
 
 //module policy
 module_policy "*" "module_source_check" {
-  operations = [ "delete" ]
   enforcement_level = "advisory"
   locals {
     source = core::try(meta.source, "")
