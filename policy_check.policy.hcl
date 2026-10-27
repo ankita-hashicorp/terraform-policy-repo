@@ -39,8 +39,28 @@ resource_policy "random_pet" "pet_separator_check_create" {
   enforcement_level = "advisory"
   enforce {
     condition     = attrs.separator == "s"
-    info_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}."
-    error_message = "length must be 6 and prefix must be 'dev'. Current values: length=${attrs.length}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
+    info_message = "length must be 6 and prefix must be 'dev'. Current values: separator=${attrs.separator}."
+    error_message = "length must be 6 and prefix must be 'dev'. Current values: separator=${attrs.separator}. Adding very long error and info message to check UI orienatation is correct or not bdbdhdbddjdbdjb"
+  }
+}
+
+resource_policy "random_string" "string_create_check" {
+  operations = [ "create"]
+  enforcement_level = "advisory"
+  enforce {
+    condition     = meta.type != ""
+    info_message = "${meta.type} must be random_string. Current values: ${meta.type}."
+    error_message = "${meta.type} must be random_string. Current values: ${meta.type}."
+  }
+}
+
+resource_policy "random_string" "string_delete_check" {
+  operations = [ "delete"]
+  enforcement_level = "advisory"
+  enforce {
+    condition     = meta.type != ""
+    info_message = "${meta.type} must be random_string. Current values: ${meta.type}."
+    error_message = "${meta.type} must be random_string. Current values: ${meta.type}."
   }
 }
 
