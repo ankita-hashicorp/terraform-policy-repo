@@ -16,7 +16,7 @@ input "approved_module_prefixes" {
 }
 
 resource_policy "random_id" "byte_length_check" {
-  operations = [ "delete"]
+  operations = [ "create"]
   enforcement_level = "mandatory"
   enforce {
     condition     = prior_attrs.byte_length > 20
@@ -67,7 +67,7 @@ resource_policy "random_string" "string_delete_check" {
 resource_policy "aws_instance" "meta_stack_deployment_group_subnet_id_check" {
   operations = [ "create", "update"]
   filter = meta.tfe_stack.deployment_group == "dev_default"
-  enforcement_level = "advisory"
+  enforcement_level = "mandatory"
   enforce {
     condition = core::try(attrs.subnet_id, "") != "aws" 
     info_message = "subnet Id should be present. meta stack group: ${meta.tfe_stack.deployment_group}"
@@ -162,6 +162,17 @@ resource_policy "aws_instance" "aws_instance_key_name_check" {
     error_message = "key_name must be example-key-3."
   }
 }
+
+resource_policy "aws_instance" "aws_instance_region_check" {
+  operations = [ "create", "update"]
+  enforcement_level = "mandatory"
+  enforce {
+    condition     = core::try(attrs.region == "us-east-1", false)
+    info_message = "Current value: ${attrs.region} param1 ${input.param1}"
+    error_message = "region must be us-east-1."
+  }
+}
+
 
 resource_policy "aws_instance" "instance_type_check" {
   enforcement_level = "advisory"
