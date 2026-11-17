@@ -15,14 +15,14 @@ policy {}
 #   default = ["./modules/", "registry.terraform.io/"]
 # }
 
-resource_policy "random_id" "byte_length_check" {
-  operations = [ "create"]
-  enforcement_level = "mandatory"
-  enforce {
-    condition     = attrs.byte_length > 20
-    info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
-  }
-}
+# resource_policy "random_id" "byte_length_check" {
+#   operations = [ "create"]
+#   enforcement_level = "mandatory"
+#   enforce {
+#     condition     = attrs.byte_length > 20
+#     info_message = "byte_length must be 8. Current value: ${attrs.byte_length}"
+#   }
+# }
 
 # resource_policy "random_pet" "pet_length_check_delete" {
 #   operations = [ "delete"]
@@ -128,15 +128,14 @@ resource_policy "random_id" "byte_length_check" {
 #   }
 # }
 
-# resource_policy "random_shuffle" "result_count_check" {
-#   operations = [ "no-op"]
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition     = core::try(attrs.result_count == 2, false) && core::try(core::length(attrs.input) != 0, false)
-#     info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
-#     error_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
-#   }
-# }
+resource_policy "random_shuffle" "result_count_check" {
+  enforcement_level = "advisory"
+  enforce {
+    condition     = core::try(attrs.result_count == 2, false)
+    info_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
+    error_message = "result_count must be 1 and input must not be empty. Current value: ${attrs.result_count}"
+  }
+}
 
 # resource_policy "aws_instance" "monitoring_and_availability_zone_check#@#$%%^^&*(){}<??I!!!@@##$>~"{
 #   operations = [ "create", "update"]
