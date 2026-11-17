@@ -87,46 +87,46 @@ policy {}
   
 # }
 
-# resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
-#   operations = [ "create", "update"]
-#   filter = meta.tfe_stack.deployment_name == "test"
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition = core::try(attrs.subnet_id, "") != "aws" 
-#     info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
-#     error_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
-#   }
+resource_policy "aws_instance" "meta_deployment_name_subnet_id_check" {
+  operations = [ "create", "update"]
+  filter = meta.tfe_stack.deployment_name == "test"
+  enforcement_level = "advisory"
+  enforce {
+    condition = core::try(attrs.subnet_id, "") != "aws" 
+    info_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
+    error_message = "subnet Id should be present. meta deployment_name: ${meta.tfe_stack.deployment_name}"
+  }
   
-# }
+}
 
-# resource_policy "random_pet" "pet_prefix_check_create" {
-#   operations = [ "create"]
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition     = attrs.prefix == "dev" && meta.operation == "create"
-#     info_message = "current prefix=${attrs.prefix}."
-#     error_message = "current prefix=${attrs.prefix}."
-#   }
-# }
+resource_policy "random_pet" "pet_prefix_check_create" {
+  operations = [ "create"]
+  enforcement_level = "advisory"
+  enforce {
+    condition     = attrs.prefix == "dev" && meta.operation == "create"
+    info_message = "current prefix=${attrs.prefix}."
+    error_message = "current prefix=${attrs.prefix}."
+  }
+}
 
-# resource_policy "random_pet" "pet_prefix_check_delete" {
-#   operations = [ "delete"]
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition     = prior_attrs.prefix == "dev" && meta.operation == "delete"
-#     info_message = "current prefix=${prior_attrs.prefix}."
-#     error_message = "current prefix=${prior_attrs.prefix}."
-#   }
-# }
+resource_policy "random_pet" "pet_prefix_check_delete" {
+  operations = [ "delete"]
+  enforcement_level = "advisory"
+  enforce {
+    condition     = prior_attrs.prefix == "dev" && meta.operation == "delete"
+    info_message = "current prefix=${prior_attrs.prefix}."
+    error_message = "current prefix=${prior_attrs.prefix}."
+  }
+}
 
-# resource_policy "random_password" "length_special_check" {
-#   enforcement_level = "advisory"
-#   enforce {
-#     condition     = attrs.length != 10 && attrs.special == true
-#     info_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
-#     error_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
-#   }
-# }
+resource_policy "random_password" "length_special_check" {
+  enforcement_level = "advisory"
+  enforce {
+    condition     = attrs.length != 10 && attrs.special == true
+    info_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
+    error_message = "length must be 10 and special must be true. Current values: length=${attrs.length}, special=${attrs.special}"
+  }
+}
 
 resource_policy "random_shuffle" "result_count_check" {
   enforcement_level = "advisory"
