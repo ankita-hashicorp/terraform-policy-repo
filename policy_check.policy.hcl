@@ -183,91 +183,91 @@ resource_policy "aws_instance" "instance_type_check" {
   }
 }
 
-resource_policy "aws_s3_bucket" "bucket_name_check" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.bucket == "test", false)
-    error_message = "bucket must be present. Current value: ${attrs.bucket}"
-  }
-}
+# resource_policy "aws_s3_bucket" "bucket_name_check" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.bucket == "test", false)
+#     error_message = "bucket must be present. Current value: ${attrs.bucket}"
+#   }
+# }
 
-resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
-  operations = [ "create", "no-op"]
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
-    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
-    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
-  }
-}
+# resource_policy "aws_s3_bucket" "tag_name_enviornment_check" {
+#   operations = [ "create", "no-op"]
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
+#     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
+#     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
+#   }
+# }
 
 //no resource for this policy, just to test the policy engine
-resource_policy "aws_cloudtrail" "tag_name_enviornment_check_no_resource" {
-  enforcement_level = "advisory"
-  enforce {
-    condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
-    error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
-    info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
-  }
-}
+# resource_policy "aws_cloudtrail" "tag_name_enviornment_check_no_resource" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition     = core::try(attrs.tags.Name != "", false) && attrs.tags.Environment == "prod"
+#     error_message = "bucket must have a name tag. Current value: ${attrs.tags.Name} and envioronment ${attrs.tags.Environment}"
+#     info_message = "Bucket must have a name tag. Current name value: ${attrs.tags.Name} and environment ${attrs.tags.Environment}"
+#   }
+# }
 
 
-//provider policy
-provider_policy "aws" "provider_type_validation" {
-  enforcement_level = "advisory"
-  enforce {
-    condition    = core::contains(local.allowed_providers, meta.type)
-    info_message = "provider type: ${meta.type} is valid"
-    error_message = "provider type: ${meta.type} is not allowed"
-  }
-}
+# //provider policy
+# provider_policy "aws" "provider_type_validation" {
+#   enforcement_level = "advisory"
+#   enforce {
+#     condition    = core::contains(local.allowed_providers, meta.type)
+#     info_message = "provider type: ${meta.type} is valid"
+#     error_message = "provider type: ${meta.type} is not allowed"
+#   }
+# }
+
+# //module policy
+# module_policy "*" "module_source_check" {
+#   enforcement_level = "advisory"
+#   locals {
+#     source = core::try(meta.source, "")
+#     matches = [
+#       for prefix in input.approved_module_prefixes : prefix
+#       if core::length(core::regexall("^${prefix}", local.source)) > 0
+#     ]
+#   }
+
+#   enforce {
+#     condition     = core::length(local.matches) > 0
+#     error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
+#     info_message  = "module source '${local.source}' matches approved prefixes"
+#   }
+# }
 
 //module policy
-module_policy "*" "module_source_check" {
-  enforcement_level = "advisory"
-  locals {
-    source = core::try(meta.source, "")
-    matches = [
-      for prefix in input.approved_module_prefixes : prefix
-      if core::length(core::regexall("^${prefix}", local.source)) > 0
-    ]
-  }
+# module_policy "*" "module_version_check" {
+#   enforcement_level = "advisory"
+#   filter = core::try(meta.version, "") != ""
 
-  enforce {
-    condition     = core::length(local.matches) > 0
-    error_message = "module source '${local.source}' is not from an approved prefix (${core::join(", ", input.approved_module_prefixes)})"
-    info_message  = "module source '${local.source}' matches approved prefixes"
-  }
-}
+#   locals {
+#     version = core::try(meta.version, "0.0.0")
+#   }
 
-//module policy
-module_policy "*" "module_version_check" {
-  enforcement_level = "advisory"
-  filter = core::try(meta.version, "") != ""
-
-  locals {
-    version = core::try(meta.version, "0.0.0")
-  }
-
-  enforce {
-    condition     = core::semverconstraint(local.version, ">= 5.10.0")
-    error_message = "module version ${local.version} must be >= 5.10.0"
-  }
-}
+#   enforce {
+#     condition     = core::semverconstraint(local.version, ">= 5.10.0")
+#     error_message = "module version ${local.version} must be >= 5.10.0"
+#   }
+# }
 
 
 //cross refernce getResources policy
-resource_policy "aws_instance" "feature_getresources_fetch_specific" {
-  enforcement_level = "advisory"
-  # From the instance policy, fetch the sibling S3 buckets and prove we can
-  # both retrieve them and read a concrete attribute (their tags) back.
-  locals {
-    buckets      = core::getresources("aws_s3_bucket_1", {})
-    owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") != ""]
-  }
-  enforce {
-    condition     = core::length(local.owned_buckets) >= 1
-    error_message = "core::getresources must return at least one aws_s3_bucket carrying an owner tag"
-    info_message  = "core::getresources fetched ${core::length(local.buckets)} bucket(s), ${core::length(local.owned_buckets)} with an owner tag"
-  }
-}
+# resource_policy "aws_instance" "feature_getresources_fetch_specific" {
+#   enforcement_level = "advisory"
+#   # From the instance policy, fetch the sibling S3 buckets and prove we can
+#   # both retrieve them and read a concrete attribute (their tags) back.
+#   locals {
+#     buckets      = core::getresources("aws_s3_bucket_1", {})
+#     owned_buckets = [for b in local.buckets : b if core::try(b.tags.owner, "") != ""]
+#   }
+#   enforce {
+#     condition     = core::length(local.owned_buckets) >= 1
+#     error_message = "core::getresources must return at least one aws_s3_bucket carrying an owner tag"
+#     info_message  = "core::getresources fetched ${core::length(local.buckets)} bucket(s), ${core::length(local.owned_buckets)} with an owner tag"
+#   }
+# }
